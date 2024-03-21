@@ -1,32 +1,50 @@
-import { useState, useRef } from 'react'
-import { Stage, Layer, Rect, Text, Group } from 'react-konva';
+import { useState } from 'react'
+import { Stage, Layer, Rect, Text, Line} from 'react-konva';
 import './App.css'
 
 interface SpecialRectProps {
   x: number;
   y: number;
-  color: string;
-  hover: boolean;
-  number: string;
+  size: number;
+  value: number;
 }
 
 const BOX_SIZE = 60
+
+interface Board {
+  width: number;
+  height: number;
+  fields: (number | null)[];
+}
+
+const BOARD_DATA : Board = {
+  width: 6,
+  height: 6,
+  fields: [
+    1, 1, 0, 1, null, null,
+    0, 2, 3, 0, 1, null,
+    null, 1, 2, 0, 2, 1,
+    null, 2, 2, 0, 1, 0,
+    1, 0, 0, 2, 1, 0,
+    3, 1, 2, 2, null, null,
+  ]
+}
 
 function SpecialRect (props: SpecialRectProps) {
   return (
     <>
       <Rect 
-        width={BOX_SIZE}
-        height={BOX_SIZE}
-        fill={props.hover ? "red" : "white"}
+        width={props.size}
+        height={props.size}
+        fill="white"
         stroke="black"
         x={props.x}
         y={props.y}
       />
       <Text
-        text={props.number}
-        width={BOX_SIZE}
-        height={BOX_SIZE}
+        text={props.value > 0 ? props.value.toString() : ""}
+        width={props.size}
+        height={props.size}
         x={props.x}
         y={props.y}
         align="center"
@@ -37,21 +55,32 @@ function SpecialRect (props: SpecialRectProps) {
 }
 
 function App() {
-  const [message1, setMessage1] = useState("<no message>")
-  const [message2, setMessage2] = useState("<no message>")
+  const [message1] = useState("<no message>")
+  const [message2] = useState("<no message>")
   const [pos, setPos] = useState({x: 400, y: 10})
   const [pos1, setPos1] = useState({x: 400, y: 100})
   const [lastPos, setLastPos] = useState(pos)
   const [lastPos1, setLastPos1] = useState(pos)
   const hover = new Array(25);
   hover.fill(false)
-  const [hoverRect, setHoverRect] = useState(hover)
+  
+  //const [hoverRect, setHoverRect] = useState(hover)
 
   const rects = [];
   
-  for (let i = 0; i < 5; ++i) {
-    for (let j = 0; j < 5; ++j) {
-      rects.push(<SpecialRect x={10 + i*BOX_SIZE} y={10 + j*BOX_SIZE} hover={hoverRect[i*5 + j]} number={(i*5+j).toString()} />)
+  for (let i = 0; i < BOARD_DATA.width; ++i) {
+    for (let j = 0; j < BOARD_DATA.height; ++j) {
+      const field_value = BOARD_DATA.fields[j * BOARD_DATA.width + i]
+      if (field_value !== null) {
+        rects.push(
+          <SpecialRect
+            x={10 + i*BOX_SIZE}
+            y={10 + j*BOX_SIZE}
+            size={BOX_SIZE}
+            value={field_value}
+          />
+        )
+      }
     }
   }
 
@@ -89,11 +118,11 @@ function App() {
                   const y = Math.floor((e.target.y() - 10) / BOX_SIZE)
                   hover.fill(false)
                   hover[x * 5 + y] = true
-                  setHoverRect(hover)
+                  //setHoverRect(hover)
                 }
                 else {
                   hover.fill(false)
-                  setHoverRect(hover)
+                  //setHoverRect(hover)
                 }             
               }}
               onDragEnd={(e) => {
@@ -107,7 +136,7 @@ function App() {
                   setPos(lastPos)
                 }
                 hover.fill(false)
-                setHoverRect(hover)
+                //setHoverRect(hover)
               }}
             />
             <Rect
@@ -127,11 +156,11 @@ function App() {
                   const y = Math.floor((e.target.y() - 10) / BOX_SIZE)
                   hover.fill(false)
                   hover[x * 5 + y] = true
-                  setHoverRect(hover)
+                  //setHoverRect(hover)
                 }
                 else {
                   hover.fill(false)
-                  setHoverRect(hover)
+                  //setHoverRect(hover)
                 }             
               }}
               onDragEnd={(e) => {
@@ -145,9 +174,23 @@ function App() {
                   setPos1(lastPos1)
                 }
                 hover.fill(false)
-                setHoverRect(hover)
+                //setHoverRect(hover)
               }}
             />
+
+
+            <Line
+              draggable={true}
+              x={400}
+              y={200}
+              closed={true}
+              points={[0, 0, 0, 2*BOX_SIZE, 2*BOX_SIZE, 2*BOX_SIZE, 2*BOX_SIZE, BOX_SIZE, BOX_SIZE, BOX_SIZE, BOX_SIZE, 0]}
+              fill="rgba(0, 0, 255, 0.5)"
+              stroke="black"
+              strokeWidth={3}
+              opacity={1}
+            />
+
           </Layer>
         </Stage>
         <div>{message1}</div><div>{message2}</div>
