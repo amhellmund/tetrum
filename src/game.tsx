@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import { Stage, Layer, Rect, Text, Line} from 'react-konva';
-import './App.css'
+import './game.css'
 
 interface SpecialRectProps {
   x: number;
@@ -54,7 +54,7 @@ function SpecialRect (props: SpecialRectProps) {
   )
 }
 
-function App() {
+export default function Game() {
   const [message1] = useState("<no message>")
   const [message2] = useState("<no message>")
   const [pos, setPos] = useState({x: 400, y: 10})
@@ -86,7 +86,6 @@ function App() {
 
   return (
     <>
-      <h1>Tetrum</h1>
       <div
         tabIndex={1}
       >
@@ -198,5 +197,3 @@ function App() {
     </>
   )
 }
-
-export default App

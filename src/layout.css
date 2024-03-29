@@ -1,0 +1,21 @@
+.header {
+    position: sticky;
+    top: 0;
+    width: 100%;
+    display: flex;
+    z-index: 1;
+    align-items: center;
+    background-color: rgba(91, 226, 159, 0.434);
+}
+
+.header-row {
+    width: 100%;
+}
+
+.header-help {
+    text-align: right;
+}
+
+.title {
+    color: black;
+}
