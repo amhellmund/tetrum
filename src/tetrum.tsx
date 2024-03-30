@@ -51,6 +51,7 @@ export default function Tetrum(props: TetrumProperties) {
               start_pos={shape_area_start_pos}
               data={game.shapes}
               board_size={game_size.board}
+              stage_size={stage_size}
             />
           </Layer>
 

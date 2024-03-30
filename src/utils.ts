@@ -1,4 +1,4 @@
-import { Coordinate, Game, Size, Position, Color } from "./types";
+import { Coordinate, Game, Size, Position, Color, Shape } from "./types";
 
 export type GameSize = {
     overall: Size;
@@ -6,7 +6,7 @@ export type GameSize = {
     shapes: Size;
 }
 
-export const BOARD_STAGE_AREA_SEPERATOR_WIDTH = 3;
+export const BOARD_STAGE_AREA_SEPERATOR_WIDTH = 2;
 
 export function computeGameSize(game: Game): GameSize {
 
@@ -73,4 +73,11 @@ export function computeShapeAreaStartPos(game_size: GameSize): Position {
 
 export function composeColorString(color: Color): string {
     return `rgba(${color.red},${color.green},${color.blue},${color.alpha})`
+}
+
+export function clipShapeToStage(shape: Shape, coordinate: Coordinate, box_size: number, stage_size: Size): Coordinate {
+    return {
+        x: Math.min(Math.max(0, coordinate.x), stage_size.width - shape.size.width * box_size),
+        y: Math.min(Math.max(0, coordinate.y), stage_size.height - shape.size.height * box_size),
+    }
 }

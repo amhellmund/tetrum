@@ -52,7 +52,7 @@ export default function GameLayout() {
           justifyContent="center"
           alignItems="center"
         >
-          <Tetrum width={1200} height={800} />
+          <Tetrum width={1100} height={600} />
         </Box>
       </Box>
       <Help

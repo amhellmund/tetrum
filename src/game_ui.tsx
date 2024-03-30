@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { Line, Rect, Text } from 'react-konva';
 import { Board, Position, Shape, Size } from './types';
-import { computeCoordinate, composeColorString, computePosition } from './utils';
+import { computeCoordinate, composeColorString, computePosition, clipShapeToStage } from './utils';
 
 
 export type BoardUIProperties = {
@@ -115,6 +115,7 @@ export type ShapesUIProperties = {
   start_pos: Position;
   data: Shape[];
   board_size: Size;
+  stage_size: Size;
 }
 
 export function ShapesUI(props: ShapesUIProperties) {
@@ -128,6 +129,7 @@ export function ShapesUI(props: ShapesUIProperties) {
         start_pos={props.start_pos}
         data={shape}
         board_size={props.board_size}
+        stage_size={props.stage_size}
       />
     );
   }
@@ -146,6 +148,7 @@ type ShapeUIProperties = {
   start_pos: Position;
   data: Shape;
   board_size: Size;
+  stage_size: Size;
 };
 
 function ShapeUI(props: ShapeUIProperties) {
@@ -167,7 +170,8 @@ function ShapeUI(props: ShapeUIProperties) {
       strokeWidth={2}
       opacity={1}
       onDragMove={(e) => {
-        setShapePos({ x: e.target.x(), y: e.target.y() });
+        const clipped = clipShapeToStage(props.data, { x: e.target.x(), y: e.target.y() }, props.box_size, props.stage_size);
+        setShapePos({ x: clipped.x, y: clipped.y });
       }}
       onDragEnd={(e) => {
         if (e.target.x() > 0 && e.target.y() > 0) {
@@ -178,7 +182,7 @@ function ShapeUI(props: ShapeUIProperties) {
             setShapePos(snapped_coordinate);
             setLastShapePos(snapped_coordinate);
           }
-          else if (pos.i > props.board_size.width || pos.j > props.board_size.height) {
+          else if (pos.i < 0 || pos.j < 0 || pos.i + props.data.size.width > props.board_size.width || pos.j + props.data.size.height > props.board_size.height) {
             setShapePos(initial_coordinate);
             setLastShapePos(initial_coordinate);
           }
