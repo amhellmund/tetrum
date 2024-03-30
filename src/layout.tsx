@@ -12,7 +12,7 @@ import Tetrum from "./tetrum";
 
 import "./layout.css"
 
-export default function GameLayout () {
+export default function GameLayout() {
   const [showHelp, setShowHelp] = useState(false);
   const [numMoves] = useState(0);
   const [elapsedSeconds, setElapsedSeconds] = useState(0);
@@ -52,12 +52,12 @@ export default function GameLayout () {
           justifyContent="center"
           alignItems="center"
         >
-          {/* <Tetrum width={600} height={600}/> */}
+          <Tetrum width={1200} height={800} />
         </Box>
       </Box>
       <Help
         show={showHelp}
-        handleClose={() => {setShowHelp(false); setIsGameRunning(true)}}
+        handleClose={() => { setShowHelp(false); setIsGameRunning(true) }}
       />
     </>
   )

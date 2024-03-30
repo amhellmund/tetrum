@@ -1,11 +1,16 @@
-export type Dimensions = {
+export type Size = {
     width: number;
     height: number;
 }
 
 export type Position = {
+    i: number;
+    j: number;
+}
+
+export type Coordinate = {
     x: number;
-    y: number; 
+    y: number;
 }
 
 export type Game = {
@@ -15,12 +20,12 @@ export type Game = {
 }
 
 export type Board = {
-    dim: Dimensions;
+    size: Size;
     fields: (number | null)[];
 }
 
 export type Shape = {
     pos: Position;
-    dim: Dimensions;
+    size: Size;
     fields: boolean[];
 }

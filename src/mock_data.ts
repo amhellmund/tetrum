@@ -2,7 +2,7 @@ import {v4 as uuidv4} from "uuid";
 import { Game, Board, Shape} from "./types" 
 
 const BOARD: Board = {
-    dim: {
+    size: {
         width: 6,
         height: 6,
     },
@@ -18,13 +18,13 @@ const BOARD: Board = {
 
 const SHAPES: Shape[] = [
     {
-        dim: {
+        size: {
             width: 3,
             height: 2,
         },
         pos: {
-            x: 0,
-            y: 0,
+            i: 0,
+            j: 0,
         },
         fields: [
             true, true, true,
@@ -32,13 +32,13 @@ const SHAPES: Shape[] = [
         ],
     },
     {
-        dim: {
+        size: {
             width: 4,
             height: 2,
         },
         pos: {
-            x: 0,
-            y: 3,
+            i: 0,
+            j: 3,
         },
         fields: [
             true, true, true, true,
@@ -46,13 +46,13 @@ const SHAPES: Shape[] = [
         ],
     },
     {
-        dim: {
+        size: {
             width: 2,
             height: 2,
         },
         pos: {
-            x: 0,
-            y: 6,
+            i: 0,
+            j: 6,
         },
         fields: [
             true, true,
@@ -60,13 +60,13 @@ const SHAPES: Shape[] = [
         ],
     },
     {
-        dim: {
+        size: {
             width: 2,
             height: 3,
         },
         pos: {
-            x: 5,
-            y: 0,
+            i: 5,
+            j: 0,
         },
         fields: [
             true, false,
@@ -75,13 +75,13 @@ const SHAPES: Shape[] = [
         ],
     },
     {
-        dim: {
+        size: {
             width: 2,
             height: 2,
         },
         pos: {
-            x: 5,
-            y: 4,
+            i: 5,
+            j: 4,
         },
         fields: [
             true, true,
@@ -89,13 +89,13 @@ const SHAPES: Shape[] = [
         ],
     },
     {
-        dim: {
+        size: {
             width: 3,
             height: 2,
         },
         pos: {
-            x: 5,
-            y: 7,
+            i: 5,
+            j: 7,
         },
         fields: [
             true, true, false,

@@ -1,24 +1,56 @@
-import { Game, Dimensions } from "./types";
+import { Coordinate, Game, Size, Position } from "./types";
 
-export function getGameDimensions (game: Game): Dimensions {
-    const dim_shapes = getShapeDimensions(game);
+export type GameSize = {
+    overall: Size;
+    board: Size;
+    shapes: Size;
+}
+
+export function getGameSize(game: Game): GameSize {
+    const SEPERATOR_WIDTH = 3;
+    const board_size = game.board.size;
+    const shapes_size = getShapeSize(game);
 
     return {
-        width: game.board.dim.width + dim_shapes.width,
-        height: game.board.dim.height + dim_shapes.height,
+        overall: {
+            width: board_size.width + shapes_size.width + SEPERATOR_WIDTH,
+            height: Math.max(board_size.height, shapes_size.height),
+        },
+        board: board_size,
+        shapes: shapes_size,
     }
 }
 
-export function getShapeDimensions (game: Game): Dimensions {
+function getShapeSize(game: Game): Size {
     const max_x_for_shapes = Math.max(
-        ...game.shapes.map((shape) => shape.pos.x + shape.dim.width), 0
+        ...game.shapes.map((shape) => shape.pos.i + shape.size.width), 0
     );
     const max_y_for_shapes = Math.max(
-        ...game.shapes.map((shape) => shape.pos.y + shape.dim.height), 0
+        ...game.shapes.map((shape) => shape.pos.j + shape.size.height), 0
     );
 
     return {
         width: max_x_for_shapes,
         height: max_y_for_shapes,
+    }
+}
+
+const STAGE_PADDING = 5;
+
+export function computeStageSize(game_size: Size, box_size: number): Size {
+    return {
+        width: game_size.width * box_size + STAGE_PADDING,
+        height: game_size.height * box_size + STAGE_PADDING,
+    }
+}
+
+export function computeBoxSize(game_size: Size, screen_size: Size): number {
+    return Math.floor(screen_size.width / game_size.width);
+}
+
+export function computeCoordinate(pos: Position, box_size: number): Coordinate {
+    return {
+        x: pos.i * box_size + STAGE_PADDING,
+        y: pos.j * box_size + STAGE_PADDING,
     }
 }
