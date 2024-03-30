@@ -8,6 +8,10 @@
     background-color: rgba(91, 226, 159, 0.434);
 }
 
+.title {
+    color: black;
+}
+
 .header-row {
     width: 100%;
 }
@@ -16,6 +20,6 @@
     text-align: right;
 }
 
-.title {
-    color: black;
+.solve-button {
+    padding-right: 50px;
 }

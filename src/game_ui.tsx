@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { Line, Rect, Text } from 'react-konva';
 import { Board, Position, Shape, Size } from './types';
-import { computeCoordinate, composeColorString, computePosition, clipShapeToStage } from './utils';
+import { computeCoordinate, composeColorString, computePosition, clipShapeToStage, isShapeInStage, isShapeInBoard } from './utils';
 
 
 export type BoardUIProperties = {
@@ -156,7 +156,6 @@ function ShapeUI(props: ShapeUIProperties) {
   const line_points = props.data.coordinates.map((coordinate) => coordinate * props.box_size);
 
   const [shapePos, setShapePos] = useState(initial_coordinate);
-  const [lastShapePos, setLastShapePos] = useState(initial_coordinate);
 
   return (
     <Line
@@ -174,24 +173,22 @@ function ShapeUI(props: ShapeUIProperties) {
         setShapePos({ x: clipped.x, y: clipped.y });
       }}
       onDragEnd={(e) => {
-        if (e.target.x() > 0 && e.target.y() > 0) {
+        const current_coordinate = {
+          x: e.target.x(),
+          y: e.target.y(),
+        }
+        if (isShapeInStage(props.data, current_coordinate, props.box_size, props.stage_size)) {
           const pos = computePosition({ x: e.target.x(), y: e.target.y() }, props.box_size);
-          console.log(pos);
-          if (pos.i >= 0 && pos.j >= 0 && pos.i + props.data.size.width <= props.board_size.width && pos.j + props.data.size.height <= props.board_size.height) {
+          if (isShapeInBoard(props.data, pos, props.board_size)) {
             const snapped_coordinate = computeCoordinate(pos, props.box_size);
             setShapePos(snapped_coordinate);
-            setLastShapePos(snapped_coordinate);
-          }
-          else if (pos.i < 0 || pos.j < 0 || pos.i + props.data.size.width > props.board_size.width || pos.j + props.data.size.height > props.board_size.height) {
-            setShapePos(initial_coordinate);
-            setLastShapePos(initial_coordinate);
           }
           else {
-            setShapePos(lastShapePos);
+            setShapePos(initial_coordinate);
           }
         }
         else {
-          setShapePos(lastShapePos);
+          setShapePos(initial_coordinate);
         }
       }}
     />

@@ -81,3 +81,17 @@ export function clipShapeToStage(shape: Shape, coordinate: Coordinate, box_size:
         y: Math.min(Math.max(0, coordinate.y), stage_size.height - shape.size.height * box_size),
     }
 }
+
+export function isShapeInStage(shape: Shape, coordinate: Coordinate, box_size: number, stage_size: Size): boolean {
+    return coordinate.x >= 0 &&
+        coordinate.y >= 0 &&
+        coordinate.x <= stage_size.width - shape.size.width * box_size &&
+        coordinate.y <= stage_size.height - shape.size.height * box_size;
+}
+
+export function isShapeInBoard(shape: Shape, pos: Position, board_size: Size): boolean {
+    return pos.i >= 0 &&
+        pos.j >= 0 &&
+        pos.i + shape.size.width <= board_size.width + BOARD_STAGE_AREA_SEPERATOR_WIDTH / 2 &&
+        pos.j + shape.size.height <= board_size.height + BOARD_STAGE_AREA_SEPERATOR_WIDTH / 2;
+}
