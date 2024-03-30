@@ -6,6 +6,7 @@ import Help from "./help";
 import Tetrum from "./tetrum";
 
 import "./layout.css"
+
 import { Position } from "./types";
 
 
@@ -52,7 +53,7 @@ export default function GameLayout() {
                 disabled={!isGameRunning}
                 onClick={() => setIsGameRunning(false)}
               >
-                Solve Game
+                Check Solution
               </Button>
             </Box>
             <Box alignContent="center">
