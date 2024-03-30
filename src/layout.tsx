@@ -8,7 +8,7 @@ import IconButton from '@mui/material/IconButton';
 import HelpOutlineIcon from '@mui/icons-material/HelpOutline';
 
 import Help from "./help";
-import Game from "./game";
+import Tetrum from "./tetrum";
 
 import "./layout.css"
 
@@ -47,7 +47,13 @@ export default function GameLayout () {
             </IconButton>
           </Toolbar>
         </AppBar>
-        <Game />
+        <Box
+          display="flex"
+          justifyContent="center"
+          alignItems="center"
+        >
+          {/* <Tetrum width={600} height={600}/> */}
+        </Box>
       </Box>
       <Help
         show={showHelp}

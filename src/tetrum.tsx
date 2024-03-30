@@ -1,97 +1,25 @@
 import { useState } from 'react'
 import { Stage, Layer, Rect, Text, Line} from 'react-konva';
-import './game.css'
 
-interface SpecialRectProps {
-  x: number;
-  y: number;
-  size: number;
-  value: number;
-}
+import './tetrum.css'
 
-const BOX_SIZE = 60
+import getGameData from './data';
 
-interface Board {
+export type TetrumProperties = {
   width: number;
   height: number;
-  fields: (number | null)[];
-}
+};
 
-const BOARD_DATA : Board = {
-  width: 6,
-  height: 6,
-  fields: [
-    1, 1, 0, 1, null, null,
-    0, 2, 3, 0, 1, null,
-    null, 1, 2, 0, 2, 1,
-    null, 2, 2, 0, 1, 0,
-    1, 0, 0, 2, 1, 0,
-    3, 1, 2, 2, null, null,
-  ]
-}
 
-function SpecialRect (props: SpecialRectProps) {
+export default function Tetrum(props: TetrumProperties) {
+  
+  
   return (
     <>
-      <Rect 
-        width={props.size}
-        height={props.size}
-        fill="white"
-        stroke="black"
-        x={props.x}
-        y={props.y}
-      />
-      <Text
-        text={props.value > 0 ? props.value.toString() : ""}
-        width={props.size}
-        height={props.size}
-        x={props.x}
-        y={props.y}
-        align="center"
-        verticalAlign="middle"
-      />
-    </>
-  )
-}
-
-export default function Game() {
-  const [message1] = useState("<no message>")
-  const [message2] = useState("<no message>")
-  const [pos, setPos] = useState({x: 400, y: 10})
-  const [pos1, setPos1] = useState({x: 400, y: 100})
-  const [lastPos, setLastPos] = useState(pos)
-  const [lastPos1, setLastPos1] = useState(pos)
-  const hover = new Array(25);
-  hover.fill(false)
-  
-  //const [hoverRect, setHoverRect] = useState(hover)
-
-  const rects = [];
-  
-  for (let i = 0; i < BOARD_DATA.width; ++i) {
-    for (let j = 0; j < BOARD_DATA.height; ++j) {
-      const field_value = BOARD_DATA.fields[j * BOARD_DATA.width + i]
-      if (field_value !== null) {
-        rects.push(
-          <SpecialRect
-            x={10 + i*BOX_SIZE}
-            y={10 + j*BOX_SIZE}
-            size={BOX_SIZE}
-            value={field_value}
-          />
-        )
-      }
-    }
-  }
-
-  return (
-    <>
-      <div
-        tabIndex={1}
-      >
+      <div tabIndex={1}>
         <Stage
           className="stage"
-          width={1024}
+          width={600}
           height={600}
         >
           <Layer>
