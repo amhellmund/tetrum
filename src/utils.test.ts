@@ -1,4 +1,14 @@
-import { computeBoxSize, computeCoordinate, computeShapeAreaStartPos, computeStageSize, computeGameSize, STAGE_PADDING, BOARD_STAGE_AREA_SEPERATOR_WIDTH, composeColorString } from "./utils";
+import {
+    computeBoxSize,
+    computeCoordinate,
+    computeShapeAreaStartPos,
+    computeStageSize,
+    computeGameSize,
+    composeColorString,
+    computePosition,
+    STAGE_PADDING,
+    BOARD_STAGE_AREA_SEPERATOR_WIDTH,
+} from "./utils";
 
 import { MOCK_GAME } from "./mock_data";
 
@@ -24,6 +34,12 @@ test("coordinate", () => {
     expect(computeCoordinate({ i: 0, j: 0 }, 60)).toStrictEqual({ x: 0 + STAGE_PADDING, y: 0 + STAGE_PADDING });
     expect(computeCoordinate({ i: 1, j: 1 }, 60)).toStrictEqual({ x: 60 + STAGE_PADDING, y: 60 + STAGE_PADDING });
     expect(computeCoordinate({ i: 5, j: 6 }, 60)).toStrictEqual({ x: 300 + STAGE_PADDING, y: 360 + STAGE_PADDING });
+});
+
+test("position", () => {
+    expect(computePosition({ x: 0 + STAGE_PADDING, y: 0 + STAGE_PADDING }, 60)).toStrictEqual({ i: 0, j: 0 });
+    expect(computePosition({ x: 120 + STAGE_PADDING, y: 110 + STAGE_PADDING }, 60)).toStrictEqual({ i: 2, j: 2 })
+    expect(computePosition({ x: -50 + STAGE_PADDING, y: -120 + STAGE_PADDING }, 60)).toStrictEqual({ i: -1, j: -2 });
 });
 
 test("shape area start position", () => {

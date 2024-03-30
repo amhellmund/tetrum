@@ -37,7 +37,7 @@ function getShapeSize(game: Game): Size {
     }
 }
 
-export const STAGE_PADDING = 5;
+export const STAGE_PADDING = 50;
 
 export function computeStageSize(game_size: Size, box_size: number): Size {
     return {
@@ -54,6 +54,13 @@ export function computeCoordinate(pos: Position, box_size: number): Coordinate {
     return {
         x: pos.i * box_size + STAGE_PADDING,
         y: pos.j * box_size + STAGE_PADDING,
+    }
+}
+
+export function computePosition(coordinate: Coordinate, box_size: number): Position {
+    return {
+        i: Math.round((coordinate.x - STAGE_PADDING) / box_size),
+        j: Math.round((coordinate.y - STAGE_PADDING) / box_size),
     }
 }
 

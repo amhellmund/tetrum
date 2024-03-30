@@ -29,24 +29,28 @@ export default function Tetrum(props: TetrumProperties) {
           width={stage_size.width}
           height={stage_size.height}
         >
-          <Layer name="game-board">
+          <Layer key="game-board">
             <BoardUI
+              key="game-board-ui"
               box_size={box_size}
               data={game.board}
             />
           </Layer>
-          <Layer name="shapes-area">
+          <Layer key="shapes-area">
             <ShapeAreaUI
+              key="shapes-area-ui"
               box_size={box_size}
               start_pos={shape_area_start_pos}
               size={game_size.shapes}
             />
           </Layer>
-          <Layer name="shapes">
+          <Layer key="shapes">
             <ShapesUI
+              key="shapes-ui"
               box_size={box_size}
               start_pos={shape_area_start_pos}
               data={game.shapes}
+              board_size={game_size.board}
             />
           </Layer>
 
