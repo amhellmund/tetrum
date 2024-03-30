@@ -116,6 +116,7 @@ export type ShapesUIProperties = {
   data: Shape[];
   board_size: Size;
   stage_size: Size;
+  is_game_running: boolean;
 }
 
 export function ShapesUI(props: ShapesUIProperties) {
@@ -130,6 +131,7 @@ export function ShapesUI(props: ShapesUIProperties) {
         data={shape}
         board_size={props.board_size}
         stage_size={props.stage_size}
+        is_game_running={props.is_game_running}
       />
     );
   }
@@ -149,6 +151,7 @@ type ShapeUIProperties = {
   data: Shape;
   board_size: Size;
   stage_size: Size;
+  is_game_running: boolean;
 };
 
 function ShapeUI(props: ShapeUIProperties) {
@@ -157,9 +160,12 @@ function ShapeUI(props: ShapeUIProperties) {
 
   const [shapePos, setShapePos] = useState(initial_coordinate);
 
+  console.log(props.is_game_running)
+
   return (
     <Line
-      draggable={true}
+      draggable={props.is_game_running}
+      visible={props.is_game_running}
       x={shapePos.x}
       y={shapePos.y}
       closed={true}
@@ -192,5 +198,40 @@ function ShapeUI(props: ShapeUIProperties) {
         }
       }}
     />
+  )
+}
+
+export type ActiveAreaMarkerProperties = {
+  box_size: number,
+  board_size: Size,
+  shapes_area_start_pos: Position,
+  shapes_area_size: Size,
+  active_area: string | null;
+}
+
+export function ActiveAreaMarker(props: ActiveAreaMarkerProperties) {
+  const coordinate_board = computeCoordinate({ i: 0, j: 0 }, props.box_size);
+  const coordinate_shapes = computeCoordinate(props.shapes_area_start_pos, props.box_size);
+  return (
+    <>
+      <Rect
+        key={`active-area-marker-board`}
+        width={props.board_size.width * props.box_size}
+        height={props.board_size.height * props.box_size}
+        stroke="rgba(0, 0, 0, 1)"
+        strokeWidth={(props.active_area === null || props.active_area === "shapes") ? 0 : 2}
+        x={coordinate_board.x}
+        y={coordinate_board.y}
+      />
+      <Rect
+        key={`active-area-marker-shapes`}
+        width={props.shapes_area_size.width * props.box_size}
+        height={props.board_size.height * props.box_size}
+        stroke="rgba(0, 0, 0, 1)"
+        strokeWidth={(props.active_area === null || props.active_area === "board") ? 0 : 2}
+        x={coordinate_shapes.x}
+        y={coordinate_shapes.y}
+      />
+    </>
   )
 }

@@ -1,15 +1,16 @@
-import { useState } from 'react'
-import { Stage, Layer, Rect, Text, Line } from 'react-konva';
+import { Stage, Layer } from 'react-konva';
 
 import './tetrum.css'
 
 import getGameData from './data';
 import { computeBoxSize, computeGameSize, computeStageSize, computeShapeAreaStartPos } from './utils';
 import { BoardUI, ShapeAreaUI, ShapesUI } from './game_ui';
+import { useState } from 'react';
 
 export type TetrumProperties = {
   width: number;
   height: number;
+  is_game_running: boolean;
 };
 
 
@@ -20,6 +21,8 @@ export default function Tetrum(props: TetrumProperties) {
 
   const stage_size = computeStageSize(game_size.overall, box_size);
   const shape_area_start_pos = computeShapeAreaStartPos(game_size);
+
+  const [activeArea, setActiveArea] = useState(null);
 
   return (
     <>
@@ -44,6 +47,11 @@ export default function Tetrum(props: TetrumProperties) {
               size={game_size.shapes}
             />
           </Layer>
+          {/* <Layer key="active-region-marker">
+            <ActiveAreaMarker
+
+            />
+          </Layer> */}
           <Layer key="shapes">
             <ShapesUI
               key="shapes-ui"
@@ -52,6 +60,7 @@ export default function Tetrum(props: TetrumProperties) {
               data={game.shapes}
               board_size={game_size.board}
               stage_size={stage_size}
+              is_game_running={props.is_game_running}
             />
           </Layer>
 
