@@ -1,4 +1,4 @@
-import { Coordinate, Game, Size, Position } from "./types";
+import { Coordinate, Game, Size, Position, Color } from "./types";
 
 export type GameSize = {
     overall: Size;
@@ -6,14 +6,16 @@ export type GameSize = {
     shapes: Size;
 }
 
+const BOARD_STAGE_AREA_SEPERATOR_WIDTH = 3;
+
 export function getGameSize(game: Game): GameSize {
-    const SEPERATOR_WIDTH = 3;
+
     const board_size = game.board.size;
     const shapes_size = getShapeSize(game);
 
     return {
         overall: {
-            width: board_size.width + shapes_size.width + SEPERATOR_WIDTH,
+            width: board_size.width + shapes_size.width + BOARD_STAGE_AREA_SEPERATOR_WIDTH,
             height: Math.max(board_size.height, shapes_size.height),
         },
         board: board_size,
@@ -39,8 +41,8 @@ const STAGE_PADDING = 5;
 
 export function computeStageSize(game_size: Size, box_size: number): Size {
     return {
-        width: game_size.width * box_size + STAGE_PADDING,
-        height: game_size.height * box_size + STAGE_PADDING,
+        width: game_size.width * box_size + 2 * STAGE_PADDING,
+        height: game_size.height * box_size + 2 * STAGE_PADDING,
     }
 }
 
@@ -53,4 +55,15 @@ export function computeCoordinate(pos: Position, box_size: number): Coordinate {
         x: pos.i * box_size + STAGE_PADDING,
         y: pos.j * box_size + STAGE_PADDING,
     }
+}
+
+export function computeShapeAreaStartPos(game_size: GameSize): Position {
+    return {
+        i: game_size.board.width + BOARD_STAGE_AREA_SEPERATOR_WIDTH,
+        j: 0,
+    }
+}
+
+export function getColorString(color: Color): string {
+    return `rgba(${color.red}, ${color.green}, ${color.blue}, ${color.alpha})`
 }

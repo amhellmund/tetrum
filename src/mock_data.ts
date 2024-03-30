@@ -1,5 +1,5 @@
-import {v4 as uuidv4} from "uuid";
-import { Game, Board, Shape} from "./types" 
+import { v4 as uuidv4 } from "uuid";
+import { Game, Board, Shape } from "./types"
 
 const BOARD: Board = {
     size: {
@@ -30,6 +30,15 @@ const SHAPES: Shape[] = [
             true, true, true,
             true, true, true,
         ],
+        coordinates: [
+            0, 0, 0, 2, 3, 2, 3, 0
+        ],
+        color: {
+            red: 255,
+            green: 0,
+            blue: 0,
+            alpha: 0.5,
+        }
     },
     {
         size: {
@@ -44,6 +53,15 @@ const SHAPES: Shape[] = [
             true, true, true, true,
             false, true, false, true,
         ],
+        coordinates: [
+            0, 0, 0, 1, 1, 1, 1, 2, 2, 2, 2, 1, 4, 1, 4, 0
+        ],
+        color: {
+            red: 255,
+            green: 255,
+            blue: 0,
+            alpha: 0.5,
+        }
     },
     {
         size: {
@@ -58,6 +76,15 @@ const SHAPES: Shape[] = [
             true, true,
             true, true,
         ],
+        coordinates: [
+            0, 0, 0, 2, 2, 2, 2, 0
+        ],
+        color: {
+            red: 255,
+            green: 0,
+            blue: 255,
+            alpha: 0.5,
+        }
     },
     {
         size: {
@@ -73,6 +100,15 @@ const SHAPES: Shape[] = [
             true, true,
             true, true,
         ],
+        coordinates: [
+            0, 0, 0, 3, 2, 3, 2, 1, 1, 1, 1, 0
+        ],
+        color: {
+            red: 0,
+            green: 255,
+            blue: 255,
+            alpha: 0.5,
+        }
     },
     {
         size: {
@@ -87,6 +123,15 @@ const SHAPES: Shape[] = [
             true, true,
             true, true,
         ],
+        coordinates: [
+            0, 0, 0, 2, 2, 2, 2, 0
+        ],
+        color: {
+            red: 128,
+            green: 255,
+            blue: 0,
+            alpha: 0.5,
+        }
     },
     {
         size: {
@@ -100,7 +145,16 @@ const SHAPES: Shape[] = [
         fields: [
             true, true, false,
             true, true, true,
-        ]
+        ],
+        coordinates: [
+            0, 0, 0, 2, 3, 2, 3, 1, 2, 1, 2, 0
+        ],
+        color: {
+            red: 128,
+            green: 255,
+            blue: 128,
+            alpha: 0.5,
+        }
     }
 ]
 
