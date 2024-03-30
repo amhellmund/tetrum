@@ -1,6 +1,6 @@
 import { Line, Rect, Text } from 'react-konva';
 import { Board, Position, Shape, Size } from './types';
-import { computeCoordinate, getColorString } from './utils';
+import { computeCoordinate, composeColorString } from './utils';
 
 
 export type BoardUIProperties = {
@@ -123,7 +123,7 @@ export function ShapesUI(props: ShapesUIProperties) {
         y={coordinate.y}
         closed={true}
         points={line_points}
-        fill={getColorString(shape.color)}
+        fill={composeColorString(shape.color)}
         stroke="black"
         strokeWidth={2}
         opacity={1}

@@ -4,7 +4,7 @@ import { Stage, Layer, Rect, Text, Line } from 'react-konva';
 import './tetrum.css'
 
 import getGameData from './data';
-import { computeBoxSize, getGameSize, computeStageSize, computeShapeAreaStartPos } from './utils';
+import { computeBoxSize, computeGameSize, computeStageSize, computeShapeAreaStartPos } from './utils';
 import { BoardUI, ShapeAreaUI, ShapesUI } from './game_ui';
 
 export type TetrumProperties = {
@@ -15,7 +15,7 @@ export type TetrumProperties = {
 
 export default function Tetrum(props: TetrumProperties) {
   const game = getGameData();
-  const game_size = getGameSize(game);
+  const game_size = computeGameSize(game);
   const box_size = computeBoxSize(game_size.overall, { width: props.width, height: props.height });
 
   const stage_size = computeStageSize(game_size.overall, box_size);

@@ -6,9 +6,9 @@ export type GameSize = {
     shapes: Size;
 }
 
-const BOARD_STAGE_AREA_SEPERATOR_WIDTH = 3;
+export const BOARD_STAGE_AREA_SEPERATOR_WIDTH = 3;
 
-export function getGameSize(game: Game): GameSize {
+export function computeGameSize(game: Game): GameSize {
 
     const board_size = game.board.size;
     const shapes_size = getShapeSize(game);
@@ -37,7 +37,7 @@ function getShapeSize(game: Game): Size {
     }
 }
 
-const STAGE_PADDING = 5;
+export const STAGE_PADDING = 5;
 
 export function computeStageSize(game_size: Size, box_size: number): Size {
     return {
@@ -64,6 +64,6 @@ export function computeShapeAreaStartPos(game_size: GameSize): Position {
     }
 }
 
-export function getColorString(color: Color): string {
-    return `rgba(${color.red}, ${color.green}, ${color.blue}, ${color.alpha})`
+export function composeColorString(color: Color): string {
+    return `rgba(${color.red},${color.green},${color.blue},${color.alpha})`
 }
