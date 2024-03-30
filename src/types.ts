@@ -38,3 +38,8 @@ export type Shape = {
     coordinates: number[];
     color: Color;
 }
+
+export enum GameArea {
+    Board = "board",
+    Shapes = "shapes",
+}

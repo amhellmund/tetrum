@@ -1,11 +1,11 @@
 import { useState } from 'react';
 import { Line, Rect, Text } from 'react-konva';
-import { Board, Position, Shape, Size } from './types';
-import { computeCoordinate, composeColorString, computePosition, clipShapeToStage, isShapeInStage, isShapeInBoard } from './utils';
+import { Board, GameArea, Position, Shape, Size } from './types';
+import { computeCoordinate, composeColorString, computePosition, isShapeInStage, isShapeInBoard } from './utils';
 
 
 export type BoardUIProperties = {
-  box_size: number;
+  boxSize: number;
   data: Board;
 }
 
@@ -19,7 +19,7 @@ export function BoardUI(props: BoardUIProperties) {
         board_elements.push(
           <BoardRect
             key={`board-element-${i}-${j}`}
-            box_size={props.box_size}
+            boxSize={props.boxSize}
             pos={{
               i: i,
               j: j,
@@ -40,20 +40,20 @@ export function BoardUI(props: BoardUIProperties) {
 }
 
 export type BoardRectProperties = {
-  box_size: number;
+  boxSize: number;
   pos: Position;
   value: number;
 }
 
 function BoardRect(props: BoardRectProperties) {
-  const coordinate = computeCoordinate(props.pos, props.box_size);
+  const coordinate = computeCoordinate(props.pos, props.boxSize);
 
   return (
     <>
       <Rect
         key={`board-rect-${props.pos.i}-${props.pos.j}`}
-        width={props.box_size}
-        height={props.box_size}
+        width={props.boxSize}
+        height={props.boxSize}
         fill="white"
         stroke="black"
         strokeWidth={1}
@@ -63,8 +63,8 @@ function BoardRect(props: BoardRectProperties) {
       <Text
         key={`board-text-${props.pos.i}-${props.pos.j}`}
         text={props.value > 0 ? props.value.toString() : ""}
-        width={props.box_size}
-        height={props.box_size}
+        width={props.boxSize}
+        height={props.boxSize}
         x={coordinate.x}
         y={coordinate.y}
         align="center"
@@ -75,8 +75,8 @@ function BoardRect(props: BoardRectProperties) {
 }
 
 export type ShapeAreaUIProperties = {
-  box_size: number;
-  start_pos: Position;
+  boxSize: number;
+  startPos: Position;
   size: Size;
 }
 
@@ -85,12 +85,12 @@ export function ShapeAreaUI(props: ShapeAreaUIProperties) {
 
   for (let i = 0; i < props.size.width; ++i) {
     for (let j = 0; j < props.size.height; ++j) {
-      const coordinate = computeCoordinate({ i: props.start_pos.i + i, j: props.start_pos.j + j }, props.box_size);
+      const coordinate = computeCoordinate({ i: props.startPos.i + i, j: props.startPos.j + j }, props.boxSize);
       shape_area_elements.push(
         <Rect
           key={`shape-area-${i}-${j}`}
-          width={props.box_size}
-          height={props.box_size}
+          width={props.boxSize}
+          height={props.boxSize}
           fill="white"
           stroke="rgba(200, 200, 200, 255)"
           strokeWidth={1}
@@ -111,12 +111,15 @@ export function ShapeAreaUI(props: ShapeAreaUIProperties) {
 }
 
 export type ShapesUIProperties = {
-  box_size: number;
-  start_pos: Position;
+  boxSize: number;
+  startPos: Position;
   data: Shape[];
-  board_size: Size;
-  stage_size: Size;
-  is_game_running: boolean;
+  boardSize: Size;
+  stageSize: Size;
+  isGameRunning: boolean;
+  handleActiveArea: (area: GameArea | null) => void;
+  handleShapeMove: () => void;
+  handleShapePositionUpdate: (shape_index: string, new_pos: Position | null) => void;
 }
 
 export function ShapesUI(props: ShapesUIProperties) {
@@ -126,12 +129,16 @@ export function ShapesUI(props: ShapesUIProperties) {
     shapes.push(
       <ShapeUI
         key={`shape-${index}`}
-        box_size={props.box_size}
-        start_pos={props.start_pos}
+        shapeIndex={index}
+        boxSize={props.boxSize}
+        startPos={props.startPos}
         data={shape}
-        board_size={props.board_size}
-        stage_size={props.stage_size}
-        is_game_running={props.is_game_running}
+        boardSize={props.boardSize}
+        stageSize={props.stageSize}
+        isGameRunning={props.isGameRunning}
+        handleActiveArea={props.handleActiveArea}
+        handleShapeMove={props.handleShapeMove}
+        handleShapePositionUpdate={props.handleShapePositionUpdate}
       />
     );
   }
@@ -146,26 +153,30 @@ export function ShapesUI(props: ShapesUIProperties) {
 }
 
 type ShapeUIProperties = {
-  box_size: number;
-  start_pos: Position;
+  shapeIndex: string;
+  boxSize: number;
+  startPos: Position;
   data: Shape;
-  board_size: Size;
-  stage_size: Size;
-  is_game_running: boolean;
+  boardSize: Size;
+  stageSize: Size;
+  isGameRunning: boolean;
+  handleActiveArea: (area: GameArea | null) => void;
+  handleShapeMove: () => void;
+  handleShapePositionUpdate: (shape_index: string, new_pos: Position | null) => void;
 };
 
 function ShapeUI(props: ShapeUIProperties) {
-  const initial_coordinate = computeCoordinate({ i: props.start_pos.i + props.data.pos.i, j: props.start_pos.j + props.data.pos.j }, props.box_size);
-  const line_points = props.data.coordinates.map((coordinate) => coordinate * props.box_size);
+  const initial_coordinate = computeCoordinate({ i: props.startPos.i + props.data.pos.i, j: props.startPos.j + props.data.pos.j }, props.boxSize);
+  const line_points = props.data.coordinates.map((coordinate) => coordinate * props.boxSize);
 
   const [shapePos, setShapePos] = useState(initial_coordinate);
-
-  console.log(props.is_game_running)
+  const [lastArea, setLastArea] = useState(GameArea.Shapes);
+  const [lastBoardPos, setLastBoardPos] = useState<Position | null>(null);
 
   return (
     <Line
-      draggable={props.is_game_running}
-      visible={props.is_game_running}
+      draggable={props.isGameRunning}
+      visible={props.isGameRunning}
       x={shapePos.x}
       y={shapePos.y}
       closed={true}
@@ -174,61 +185,104 @@ function ShapeUI(props: ShapeUIProperties) {
       stroke="black"
       strokeWidth={2}
       opacity={1}
-      onDragMove={(e) => {
-        const clipped = clipShapeToStage(props.data, { x: e.target.x(), y: e.target.y() }, props.box_size, props.stage_size);
-        setShapePos({ x: clipped.x, y: clipped.y });
+      onDragStart={(e) => {
+        const pos = computePosition({ x: e.target.x(), y: e.target.y() }, props.boxSize);
+        if (isShapeInBoard(props.data, pos, props.boardSize)) {
+          setLastArea(GameArea.Board);
+          setLastBoardPos(pos);
+        }
+        else {
+          setLastArea(GameArea.Shapes);
+          setLastBoardPos(null);
+        }
       }}
-      onDragEnd={(e) => {
+      onDragMove={(e) => {
         const current_coordinate = {
           x: e.target.x(),
           y: e.target.y(),
         }
-        if (isShapeInStage(props.data, current_coordinate, props.box_size, props.stage_size)) {
-          const pos = computePosition({ x: e.target.x(), y: e.target.y() }, props.box_size);
-          if (isShapeInBoard(props.data, pos, props.board_size)) {
-            const snapped_coordinate = computeCoordinate(pos, props.box_size);
+        if (isShapeInStage(props.data, current_coordinate, props.boxSize, props.stageSize)) {
+          const pos = computePosition({ x: e.target.x(), y: e.target.y() }, props.boxSize);
+          if (isShapeInBoard(props.data, pos, props.boardSize)) {
+            props.handleActiveArea(GameArea.Board);
+          }
+          else {
+            props.handleActiveArea(GameArea.Shapes);
+          }
+        }
+        else {
+          props.handleActiveArea(GameArea.Shapes);
+        }
+        setShapePos(current_coordinate);
+      }}
+      onDragEnd={(e) => {
+        const handleShapeMove = (new_area: GameArea, new_board_pos: Position | null) => {
+          if (new_area === lastArea) {
+            if (new_area === GameArea.Board && new_board_pos !== null &&
+              lastBoardPos !== null && (new_board_pos.i !== lastBoardPos.i || new_board_pos.j !== lastBoardPos.j)) {
+              props.handleShapeMove();
+            }
+          }
+          else {
+            props.handleShapeMove()
+          }
+        };
+
+        const current_coordinate = {
+          x: e.target.x(),
+          y: e.target.y(),
+        }
+        if (isShapeInStage(props.data, current_coordinate, props.boxSize, props.stageSize)) {
+          const pos = computePosition({ x: e.target.x(), y: e.target.y() }, props.boxSize);
+          if (isShapeInBoard(props.data, pos, props.boardSize)) {
+            const snapped_coordinate = computeCoordinate(pos, props.boxSize);
             setShapePos(snapped_coordinate);
+            handleShapeMove(GameArea.Board, pos);
+            props.handleShapePositionUpdate(props.shapeIndex, pos);
           }
           else {
             setShapePos(initial_coordinate);
+            handleShapeMove(GameArea.Shapes, null);
           }
         }
         else {
           setShapePos(initial_coordinate);
+          handleShapeMove(GameArea.Shapes, null);
         }
+        props.handleActiveArea(null);
       }}
     />
   )
 }
 
-export type ActiveAreaMarkerProperties = {
-  box_size: number,
-  board_size: Size,
-  shapes_area_start_pos: Position,
-  shapes_area_size: Size,
-  active_area: string | null;
+export type ActiveAreaMarkerUIProperties = {
+  boxSize: number,
+  boardSize: Size,
+  shapesAreaStartPos: Position,
+  shapesAreaSize: Size,
+  activeArea: string | null;
 }
 
-export function ActiveAreaMarker(props: ActiveAreaMarkerProperties) {
-  const coordinate_board = computeCoordinate({ i: 0, j: 0 }, props.box_size);
-  const coordinate_shapes = computeCoordinate(props.shapes_area_start_pos, props.box_size);
+export function ActiveAreaMarkerUI(props: ActiveAreaMarkerUIProperties) {
+  const coordinate_board = computeCoordinate({ i: 0, j: 0 }, props.boxSize);
+  const coordinate_shapes = computeCoordinate(props.shapesAreaStartPos, props.boxSize);
   return (
     <>
       <Rect
         key={`active-area-marker-board`}
-        width={props.board_size.width * props.box_size}
-        height={props.board_size.height * props.box_size}
-        stroke="rgba(0, 0, 0, 1)"
-        strokeWidth={(props.active_area === null || props.active_area === "shapes") ? 0 : 2}
+        width={props.boardSize.width * props.boxSize}
+        height={props.boardSize.height * props.boxSize}
+        stroke="rgba(0, 255, 255, 0.4)"
+        strokeWidth={(props.activeArea === null || props.activeArea === GameArea.Shapes) ? 0 : 3}
         x={coordinate_board.x}
         y={coordinate_board.y}
       />
       <Rect
         key={`active-area-marker-shapes`}
-        width={props.shapes_area_size.width * props.box_size}
-        height={props.board_size.height * props.box_size}
-        stroke="rgba(0, 0, 0, 1)"
-        strokeWidth={(props.active_area === null || props.active_area === "board") ? 0 : 2}
+        width={props.shapesAreaSize.width * props.boxSize}
+        height={props.boardSize.height * props.boxSize}
+        stroke="rgba(0, 255, 255, 0.4)"
+        strokeWidth={(props.activeArea === null || props.activeArea === GameArea.Board) ? 0 : 3}
         x={coordinate_shapes.x}
         y={coordinate_shapes.y}
       />

@@ -6,13 +6,16 @@ import Help from "./help";
 import Tetrum from "./tetrum";
 
 import "./layout.css"
+import { Position } from "./types";
 
 
 export default function GameLayout() {
   const [showHelp, setShowHelp] = useState(false);
-  const [numMoves] = useState(0);
+  const [numMoves, setNumMoves] = useState(0);
   const [elapsedSeconds, setElapsedSeconds] = useState(0);
   const [isGameRunning, setIsGameRunning] = useState(false);
+  const [shapePositions, setShapePositions] = useState<Map<string, Position | null>>(new Map());
+
 
   useEffect(() => {
     isGameRunning && setTimeout(() => setElapsedSeconds(elapsedSeconds + 1), 1000);
@@ -67,7 +70,17 @@ export default function GameLayout() {
           justifyContent="center"
           alignItems="center"
         >
-          <Tetrum width={1100} height={600} is_game_running={isGameRunning} />
+          <Tetrum
+            width={1100}
+            height={600}
+            isGameRunning={isGameRunning}
+            handleShapeMove={() => setNumMoves(numMoves + 1)}
+            handleShapePositionUpdate={(shape_index: string, pos: Position | null) => {
+              const new_map = new Map(shapePositions);
+              new_map.set(shape_index, pos);
+              setShapePositions(new_map);
+            }}
+          />
         </Box>
       </Box >
       <Help

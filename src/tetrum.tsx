@@ -4,13 +4,16 @@ import './tetrum.css'
 
 import getGameData from './data';
 import { computeBoxSize, computeGameSize, computeStageSize, computeShapeAreaStartPos } from './utils';
-import { BoardUI, ShapeAreaUI, ShapesUI } from './game_ui';
+import { BoardUI, ShapeAreaUI, ShapesUI, ActiveAreaMarkerUI } from './game_ui';
 import { useState } from 'react';
+import { GameArea, Position } from './types';
 
 export type TetrumProperties = {
   width: number;
   height: number;
-  is_game_running: boolean;
+  isGameRunning: boolean;
+  handleShapeMove: () => void;
+  handleShapePositionUpdate: (shape_index: string, new_pos: Position | null) => void;
 };
 
 
@@ -22,7 +25,7 @@ export default function Tetrum(props: TetrumProperties) {
   const stage_size = computeStageSize(game_size.overall, box_size);
   const shape_area_start_pos = computeShapeAreaStartPos(game_size);
 
-  const [activeArea, setActiveArea] = useState(null);
+  const [activeArea, setActiveArea] = useState<GameArea | null>(null);
 
   return (
     <>
@@ -35,32 +38,39 @@ export default function Tetrum(props: TetrumProperties) {
           <Layer key="game-board">
             <BoardUI
               key="game-board-ui"
-              box_size={box_size}
+              boxSize={box_size}
               data={game.board}
             />
           </Layer>
           <Layer key="shapes-area">
             <ShapeAreaUI
               key="shapes-area-ui"
-              box_size={box_size}
-              start_pos={shape_area_start_pos}
+              boxSize={box_size}
+              startPos={shape_area_start_pos}
               size={game_size.shapes}
             />
           </Layer>
-          {/* <Layer key="active-region-marker">
-            <ActiveAreaMarker
-
+          <Layer key="active-region-marker">
+            <ActiveAreaMarkerUI
+              boxSize={box_size}
+              boardSize={game_size.board}
+              shapesAreaStartPos={shape_area_start_pos}
+              shapesAreaSize={game_size.shapes}
+              activeArea={activeArea}
             />
-          </Layer> */}
+          </Layer>
           <Layer key="shapes">
             <ShapesUI
               key="shapes-ui"
-              box_size={box_size}
-              start_pos={shape_area_start_pos}
+              boxSize={box_size}
+              startPos={shape_area_start_pos}
               data={game.shapes}
-              board_size={game_size.board}
-              stage_size={stage_size}
-              is_game_running={props.is_game_running}
+              boardSize={game_size.board}
+              stageSize={stage_size}
+              isGameRunning={props.isGameRunning}
+              handleActiveArea={(active_area) => setActiveArea(active_area)}
+              handleShapeMove={props.handleShapeMove}
+              handleShapePositionUpdate={props.handleShapePositionUpdate}
             />
           </Layer>
 
