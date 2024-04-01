@@ -12,9 +12,9 @@ export type BoardUIProperties = {
 export function BoardUI(props: BoardUIProperties) {
   const board_elements = [];
 
-  for (let i = 0; i < props.data.size.width; ++i) {
-    for (let j = 0; j < props.data.size.height; ++j) {
-      const field = props.data.fields[j * props.data.size.width + i];
+  for (let i = 0; i < props.data.size.height; ++i) {
+    for (let j = 0; j < props.data.size.width; ++j) {
+      const field = props.data.fields[i * props.data.size.width + j];
       if (field !== null) {
         board_elements.push(
           <BoardRect
@@ -83,8 +83,8 @@ export type ShapeAreaUIProperties = {
 export function ShapeAreaUI(props: ShapeAreaUIProperties) {
   const shape_area_elements = [];
 
-  for (let i = 0; i < props.size.width; ++i) {
-    for (let j = 0; j < props.size.height; ++j) {
+  for (let i = 0; i < props.size.height; ++i) {
+    for (let j = 0; j < props.size.width; ++j) {
       const coordinate = computeCoordinate({ i: props.startPos.i + i, j: props.startPos.j + j }, props.boxSize);
       shape_area_elements.push(
         <Rect
@@ -119,7 +119,7 @@ export type ShapesUIProperties = {
   gameState: GameState;
   handleActiveArea: (area: GameArea | null) => void;
   handleShapeMove: () => void;
-  handleShapePositionUpdate: (shape_index: string, new_pos: Position | null) => void;
+  handleShapePositionUpdate: (shape_index: number, new_pos: Position | null) => void;
 }
 
 export function ShapesUI(props: ShapesUIProperties) {
@@ -129,7 +129,7 @@ export function ShapesUI(props: ShapesUIProperties) {
     shapes.push(
       <ShapeUI
         key={`shape-${index}`}
-        shapeIndex={index}
+        shapeIndex={parseInt(index)}
         boxSize={props.boxSize}
         startPos={props.startPos}
         data={shape}
@@ -153,7 +153,7 @@ export function ShapesUI(props: ShapesUIProperties) {
 }
 
 type ShapeUIProperties = {
-  shapeIndex: string;
+  shapeIndex: number;
   boxSize: number;
   startPos: Position;
   data: Shape;
@@ -162,7 +162,7 @@ type ShapeUIProperties = {
   gameState: GameState;
   handleActiveArea: (area: GameArea | null) => void;
   handleShapeMove: () => void;
-  handleShapePositionUpdate: (shape_index: string, new_pos: Position | null) => void;
+  handleShapePositionUpdate: (shape_index: number, new_pos: Position | null) => void;
 };
 
 function ShapeUI(props: ShapeUIProperties) {

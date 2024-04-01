@@ -1,4 +1,4 @@
-import { Coordinate, Game, Size, Position, Color, Shape } from "./types";
+import { Coordinate, Game, Size, Position, Color, Shape, Board } from "./types";
 
 export type GameSize = {
     overall: Size;
@@ -24,16 +24,16 @@ export function computeGameSize(game: Game): GameSize {
 }
 
 function getShapeSize(game: Game): Size {
-    const max_x_for_shapes = Math.max(
+    const max_i_for_shapes = Math.max(
         ...game.shapes.map((shape) => shape.pos.i + shape.size.width), 0
     );
-    const max_y_for_shapes = Math.max(
+    const max_j_for_shapes = Math.max(
         ...game.shapes.map((shape) => shape.pos.j + shape.size.height), 0
     );
 
     return {
-        width: max_x_for_shapes,
-        height: max_y_for_shapes,
+        width: max_j_for_shapes,
+        height: max_i_for_shapes,
     }
 }
 
@@ -52,22 +52,22 @@ export function computeBoxSize(game_size: Size, screen_size: Size): number {
 
 export function computeCoordinate(pos: Position, box_size: number): Coordinate {
     return {
-        x: pos.i * box_size + STAGE_PADDING,
-        y: pos.j * box_size + STAGE_PADDING,
+        x: pos.j * box_size + STAGE_PADDING,
+        y: pos.i * box_size + STAGE_PADDING,
     }
 }
 
 export function computePosition(coordinate: Coordinate, box_size: number): Position {
     return {
-        i: Math.round((coordinate.x - STAGE_PADDING) / box_size),
-        j: Math.round((coordinate.y - STAGE_PADDING) / box_size),
+        i: Math.round((coordinate.y - STAGE_PADDING) / box_size),
+        j: Math.round((coordinate.x - STAGE_PADDING) / box_size),
     }
 }
 
 export function computeShapeAreaStartPos(game_size: GameSize): Position {
     return {
-        i: game_size.board.width + BOARD_STAGE_AREA_SEPERATOR_WIDTH,
-        j: 0,
+        i: 0,
+        j: game_size.board.width + BOARD_STAGE_AREA_SEPERATOR_WIDTH,
     }
 }
 
@@ -92,6 +92,62 @@ export function isShapeInStage(shape: Shape, coordinate: Coordinate, box_size: n
 export function isShapeInBoard(shape: Shape, pos: Position, board_size: Size): boolean {
     return pos.i >= 0 &&
         pos.j >= 0 &&
-        pos.i + shape.size.width <= board_size.width + BOARD_STAGE_AREA_SEPERATOR_WIDTH / 2 &&
-        pos.j + shape.size.height <= board_size.height + BOARD_STAGE_AREA_SEPERATOR_WIDTH / 2;
+        pos.i + shape.size.height <= board_size.height + BOARD_STAGE_AREA_SEPERATOR_WIDTH / 2 &&
+        pos.j + shape.size.width <= board_size.width + BOARD_STAGE_AREA_SEPERATOR_WIDTH / 2;
+}
+
+export type GameSolutionCheck = {
+    is_valid_solution: boolean;
+    violation: string | null;
+}
+
+export function checkGameSolution(board: Board, shapes: Shape[], shape_positions: Map<number, Position>): GameSolutionCheck {
+    const board_coverage = new Array(board.size.width * board.size.height).fill(false);
+
+    for (const [index, pos] of shape_positions.entries()) {
+        const shape = shapes[index];
+        const shape_size = shape.fields.reduce((acc, value) => acc + (value == true ? 1 : 0), 0);
+        let covered_board_numbers_sum = 0;
+        for (let i = 0; i < shape.size.height; ++i) {
+            for (let j = 0; j < shape.size.width; ++j) {
+                const cur_pos = {
+                    i: pos.i + i,
+                    j: pos.j + j,
+                };
+                if (isPosInBoard(cur_pos, board.size)) {
+                    const board_field = board.fields[cur_pos.i * board.size.width + cur_pos.j];
+                    if (board_field !== null) {
+                        covered_board_numbers_sum += board_field;
+                        board_coverage[cur_pos.i * board.size.width + cur_pos.j] = true;
+                    }
+                }
+
+            }
+        }
+        if (shape_size != covered_board_numbers_sum) {
+            return {
+                is_valid_solution: false,
+                violation: "Shape size mismatches accumulated board numbers",
+            }
+        }
+    }
+    for (let i = 0; i < board.size.height; ++i) {
+        for (let j = 0; j < board.size.width; ++j) {
+            const index = i * board.size.width + j;
+            if (board.fields[index] !== null && board_coverage[index] == false) {
+                return {
+                    is_valid_solution: false,
+                    violation: "Board element is not covered",
+                }
+            }
+        }
+    }
+    return {
+        is_valid_solution: true,
+        violation: null,
+    }
+}
+
+function isPosInBoard(pos: Position, board_size: Size): boolean {
+    return (pos.i >= 0 && pos.j >= 0 && pos.i < board_size.height && pos.j < board_size.width);
 }

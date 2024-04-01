@@ -15,7 +15,7 @@ export default function GameLayout() {
   const [numMoves, setNumMoves] = useState(0);
   const [elapsedSeconds, setElapsedSeconds] = useState(0);
   const [gameState, setGameState] = useState(GameState.Init);
-  const [shapePositions, setShapePositions] = useState<Map<string, Position | null>>(new Map());
+  const [shapePositions, setShapePositions] = useState<Map<number, Position | null>>(new Map());
 
 
   useEffect(() => {
@@ -52,7 +52,7 @@ export default function GameLayout() {
                 variant="contained"
                 disabled={gameState != GameState.Started}
                 onClick={() => {
-
+                  console.log(shapePositions);
                 }}
               >
                 Check Solution
@@ -78,7 +78,7 @@ export default function GameLayout() {
             height={600}
             gameState={gameState}
             handleShapeMove={() => setNumMoves(numMoves + 1)}
-            handleShapePositionUpdate={(shape_index: string, pos: Position | null) => {
+            handleShapePositionUpdate={(shape_index: number, pos: Position | null) => {
               const new_map = new Map(shapePositions);
               new_map.set(shape_index, pos);
               setShapePositions(new_map);

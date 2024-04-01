@@ -13,7 +13,7 @@ export type TetrumProperties = {
   height: number;
   gameState: GameState;
   handleShapeMove: () => void;
-  handleShapePositionUpdate: (shape_index: string, new_pos: Position | null) => void;
+  handleShapePositionUpdate: (shape_index: number, new_pos: Position | null) => void;
 };
 
 

@@ -12,7 +12,7 @@ const BOARD: Board = {
         null, 0, 2, 0, 2, 0,
         null, 2, 2, 0, 1, 1,
         1, 0, 0, 2, 1, 0,
-        2, 1, 2, 2, null, null,
+        2, 1, 1, 2, null, null,
     ],
 };
 
@@ -46,8 +46,8 @@ const SHAPES: Shape[] = [
             height: 2,
         },
         pos: {
-            i: 0,
-            j: 3,
+            i: 3,
+            j: 0,
         },
         fields: [
             true, true, true, true,
@@ -69,8 +69,8 @@ const SHAPES: Shape[] = [
             height: 2,
         },
         pos: {
-            i: 0,
-            j: 6,
+            i: 6,
+            j: 0,
         },
         fields: [
             true, true,
@@ -92,8 +92,8 @@ const SHAPES: Shape[] = [
             height: 3,
         },
         pos: {
-            i: 5,
-            j: 0,
+            i: 0,
+            j: 5,
         },
         fields: [
             true, false,
@@ -116,8 +116,8 @@ const SHAPES: Shape[] = [
             height: 2,
         },
         pos: {
-            i: 5,
-            j: 4,
+            i: 4,
+            j: 5,
         },
         fields: [
             true, true,
@@ -139,8 +139,8 @@ const SHAPES: Shape[] = [
             height: 2,
         },
         pos: {
-            i: 5,
-            j: 7,
+            i: 7,
+            j: 5,
         },
         fields: [
             true, true, false,
