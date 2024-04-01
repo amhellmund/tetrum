@@ -27,7 +27,7 @@ export default function Help(props: HelpProperties) {
                             The <i>Board</i> as well as the <i>Shape Area</i> get highlighted by a surrounding border whenever a shape is moved in either of the areas.
                             <img style={{ margin: "20px" }} src={animated_help} width={400} />
                         </li>
-                        <li>Press the <i>Solve Game</i> button to check if the game is won.</li>
+                        <li>Press the <i>Check Solution</i> button to check if the game is won.</li>
                     </ul>
                 </Box>
             </DialogContent>
