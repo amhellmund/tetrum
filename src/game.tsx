@@ -3,24 +3,24 @@ import { useState, useEffect } from "react";
 import { AppBar, Button, Box, Toolbar, Typography } from "@mui/material";
 
 import Help from "./help";
-import Tetrum from "./tetrum";
+import GameStage from "./stage";
 
-import "./layout.css"
+import "./css/layout.css"
 
-import { Position } from "./types";
+import { GameState, Position } from "./types";
 
 
 export default function GameLayout() {
   const [showHelp, setShowHelp] = useState(false);
   const [numMoves, setNumMoves] = useState(0);
   const [elapsedSeconds, setElapsedSeconds] = useState(0);
-  const [isGameRunning, setIsGameRunning] = useState(false);
+  const [gameState, setGameState] = useState(GameState.Init);
   const [shapePositions, setShapePositions] = useState<Map<string, Position | null>>(new Map());
 
 
   useEffect(() => {
-    isGameRunning && setTimeout(() => setElapsedSeconds(elapsedSeconds + 1), 1000);
-  }, [elapsedSeconds, isGameRunning]);
+    gameState == GameState.Started && setTimeout(() => setElapsedSeconds(elapsedSeconds + 1), 1000);
+  }, [elapsedSeconds, gameState]);
 
   return (
     <>
@@ -34,8 +34,8 @@ export default function GameLayout() {
               <Button
                 sx={{ marginRight: "50px" }}
                 variant="contained"
-                disabled={isGameRunning}
-                onClick={() => setIsGameRunning(true)}
+                disabled={gameState == GameState.Started || gameState == GameState.Finished}
+                onClick={() => setGameState(GameState.Started)}
               >
                 Start Game
               </Button>
@@ -50,8 +50,10 @@ export default function GameLayout() {
               <Button
                 sx={{ marginRight: "50px" }}
                 variant="contained"
-                disabled={!isGameRunning}
-                onClick={() => setIsGameRunning(false)}
+                disabled={gameState != GameState.Started}
+                onClick={() => {
+
+                }}
               >
                 Check Solution
               </Button>
@@ -71,10 +73,10 @@ export default function GameLayout() {
           justifyContent="center"
           alignItems="center"
         >
-          <Tetrum
+          <GameStage
             width={1100}
             height={600}
-            isGameRunning={isGameRunning}
+            gameState={gameState}
             handleShapeMove={() => setNumMoves(numMoves + 1)}
             handleShapePositionUpdate={(shape_index: string, pos: Position | null) => {
               const new_map = new Map(shapePositions);

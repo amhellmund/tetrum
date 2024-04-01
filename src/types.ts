@@ -43,3 +43,10 @@ export enum GameArea {
     Board = "board",
     Shapes = "shapes",
 }
+
+export enum GameState {
+    Init = "initialized",
+    Started = "started",
+    Stopped = "stopped",
+    Finished = "finished",
+}

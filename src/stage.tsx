@@ -1,23 +1,23 @@
 import { Stage, Layer } from 'react-konva';
 
-import './tetrum.css'
+import './css/game_stage.css'
 
 import getGameData from './data';
 import { computeBoxSize, computeGameSize, computeStageSize, computeShapeAreaStartPos } from './utils';
-import { BoardUI, ShapeAreaUI, ShapesUI, ActiveAreaMarkerUI } from './game_ui';
+import { BoardUI, ShapeAreaUI, ShapesUI, ActiveAreaMarkerUI } from './elements';
 import { useState } from 'react';
-import { GameArea, Position } from './types';
+import { GameArea, GameState, Position } from './types';
 
 export type TetrumProperties = {
   width: number;
   height: number;
-  isGameRunning: boolean;
+  gameState: GameState;
   handleShapeMove: () => void;
   handleShapePositionUpdate: (shape_index: string, new_pos: Position | null) => void;
 };
 
 
-export default function Tetrum(props: TetrumProperties) {
+export default function GameStage(props: TetrumProperties) {
   const game = getGameData();
   const game_size = computeGameSize(game);
   const box_size = computeBoxSize(game_size.overall, { width: props.width, height: props.height });
@@ -67,7 +67,7 @@ export default function Tetrum(props: TetrumProperties) {
               data={game.shapes}
               boardSize={game_size.board}
               stageSize={stage_size}
-              isGameRunning={props.isGameRunning}
+              gameState={props.gameState}
               handleActiveArea={(active_area) => setActiveArea(active_area)}
               handleShapeMove={props.handleShapeMove}
               handleShapePositionUpdate={props.handleShapePositionUpdate}

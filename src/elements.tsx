@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { Line, Rect, Text } from 'react-konva';
-import { Board, GameArea, Position, Shape, Size } from './types';
+import { Board, GameArea, GameState, Position, Shape, Size } from './types';
 import { computeCoordinate, composeColorString, computePosition, isShapeInStage, isShapeInBoard } from './utils';
 
 
@@ -116,7 +116,7 @@ export type ShapesUIProperties = {
   data: Shape[];
   boardSize: Size;
   stageSize: Size;
-  isGameRunning: boolean;
+  gameState: GameState;
   handleActiveArea: (area: GameArea | null) => void;
   handleShapeMove: () => void;
   handleShapePositionUpdate: (shape_index: string, new_pos: Position | null) => void;
@@ -135,7 +135,7 @@ export function ShapesUI(props: ShapesUIProperties) {
         data={shape}
         boardSize={props.boardSize}
         stageSize={props.stageSize}
-        isGameRunning={props.isGameRunning}
+        gameState={props.gameState}
         handleActiveArea={props.handleActiveArea}
         handleShapeMove={props.handleShapeMove}
         handleShapePositionUpdate={props.handleShapePositionUpdate}
@@ -159,7 +159,7 @@ type ShapeUIProperties = {
   data: Shape;
   boardSize: Size;
   stageSize: Size;
-  isGameRunning: boolean;
+  gameState: GameState;
   handleActiveArea: (area: GameArea | null) => void;
   handleShapeMove: () => void;
   handleShapePositionUpdate: (shape_index: string, new_pos: Position | null) => void;
@@ -175,8 +175,8 @@ function ShapeUI(props: ShapeUIProperties) {
 
   return (
     <Line
-      draggable={props.isGameRunning}
-      visible={props.isGameRunning}
+      draggable={props.gameState == GameState.Started}
+      visible={props.gameState == GameState.Started}
       x={shapePos.x}
       y={shapePos.y}
       closed={true}
