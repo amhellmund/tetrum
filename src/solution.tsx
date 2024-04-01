@@ -1,4 +1,4 @@
-import { Dialog, Button, DialogTitle, DialogContent, DialogActions, Box } from '@mui/material';
+import { Dialog, Button, DialogTitle, DialogContent, DialogActions, Box, Grid } from '@mui/material';
 
 import CheckCircleIcon from '@mui/icons-material/CheckCircle';
 import ErrorIcon from '@mui/icons-material/Error';
@@ -19,20 +19,26 @@ export default function Solution(props: SolutionProperties) {
         >
             <DialogTitle>Solution Check</DialogTitle>
             <DialogContent>
-                <Box>
-                    {
-                        props.success ?
-                            <CheckCircleIcon /> :
-                            <ErrorIcon />
-                    }
-                </Box>
-                <Box>
-                    {
-                        props.violation_message === null ?
-                            "You solution is correct. Congratulations!" :
-                            `Your solution is incorrect: ${props.violation_message}. Press 'Start Game' to continue.`
-                    }
-                </Box>
+                <Grid container spacing={2}>
+                    <Grid item xs={2}>
+                        <Box>
+                            {
+                                props.success ?
+                                    <CheckCircleIcon /> :
+                                    <ErrorIcon />
+                            }
+                        </Box>
+                    </Grid>
+                    <Grid item xs={6}>
+                        <Box>
+                            {
+                                props.violation_message === null ?
+                                    "You solution is correct. Congratulations!" :
+                                    `Your solution is incorrect: ${props.violation_message}. Press 'Start Game' to continue.`
+                            }
+                        </Box>
+                    </Grid>
+                </Grid>
             </DialogContent>
             <DialogActions>
                 <Button variant="contained" onClick={props.handleClose}>Ok</Button>

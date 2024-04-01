@@ -12,6 +12,29 @@ import Solution from "./solution";
 import { checkGameSolution, GameSolutionCheck } from "./utils";
 import getGameData from "./data";
 
+function getWindowDimensions() {
+  const { innerWidth: width, innerHeight: height } = window;
+  return {
+    width,
+    height
+  };
+}
+
+function useWindowDimensions() {
+  const [windowDimensions, setWindowDimensions] = useState(getWindowDimensions());
+
+  useEffect(() => {
+    function handleResize() {
+      setWindowDimensions(getWindowDimensions());
+    }
+
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
+  }, []);
+
+  return windowDimensions;
+}
+
 
 export default function GameLayout() {
   const [showHelp, setShowHelp] = useState(false);
@@ -27,6 +50,8 @@ export default function GameLayout() {
   useEffect(() => {
     gameState == GameState.Started && setTimeout(() => setElapsedSeconds(elapsedSeconds + 1), 1000);
   }, [elapsedSeconds, gameState]);
+
+  const { width, height } = useWindowDimensions();
 
   return (
     <>
@@ -89,8 +114,8 @@ export default function GameLayout() {
         >
           <GameStage
             game={game}
-            width={1100}
-            height={600}
+            width={Math.floor(width * 0.75)}
+            height={Math.floor(height * 0.75)}
             gameState={gameState}
             handleShapeMove={() => setNumMoves(numMoves + 1)}
             handleShapePositionUpdate={(shape_index: number, pos: Position | null) => {

@@ -47,7 +47,10 @@ export function computeStageSize(game_size: Size, box_size: number): Size {
 }
 
 export function computeBoxSize(game_size: Size, screen_size: Size): number {
-    return Math.floor(screen_size.width / game_size.width);
+    return Math.min(
+        Math.floor(screen_size.width / game_size.width),
+        Math.floor(screen_size.height / game_size.height),
+    )
 }
 
 export function computeCoordinate(pos: Position, box_size: number): Coordinate {
@@ -140,7 +143,7 @@ export function checkGameSolution(board: Board, shapes: Shape[], shape_positions
             if (board.fields[index] !== null && board_coverage[index] == false) {
                 return {
                     success: false,
-                    violation_message: "Board element is not covered",
+                    violation_message: "Board elements are not covered",
                 }
             }
         }

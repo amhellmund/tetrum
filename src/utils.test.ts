@@ -24,7 +24,8 @@ test("game dimensions", () => {
 });
 
 test("box size", () => {
-    expect(computeBoxSize({ width: 6, height: 6 }, { width: 1000, height: 600 })).toBe(Math.floor(1000 / 6));
+    expect(computeBoxSize({ width: 6, height: 6 }, { width: 1000, height: 1200 })).toBe(Math.floor(1000 / 6));
+    expect(computeBoxSize({ width: 6, height: 6 }, { width: 1000, height: 600 })).toBe(Math.floor(600 / 6));
 });
 
 test("stage size", () => {
