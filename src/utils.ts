@@ -97,37 +97,40 @@ export function isShapeInBoard(shape: Shape, pos: Position, board_size: Size): b
 }
 
 export type GameSolutionCheck = {
-    is_valid_solution: boolean;
-    violation: string | null;
+    success: boolean;
+    violation_message: string | null;
 }
 
-export function checkGameSolution(board: Board, shapes: Shape[], shape_positions: Map<number, Position>): GameSolutionCheck {
+export function checkGameSolution(board: Board, shapes: Shape[], shape_positions: Map<number, Position | null>): GameSolutionCheck {
     const board_coverage = new Array(board.size.width * board.size.height).fill(false);
 
     for (const [index, pos] of shape_positions.entries()) {
+
         const shape = shapes[index];
         const shape_size = shape.fields.reduce((acc, value) => acc + (value == true ? 1 : 0), 0);
         let covered_board_numbers_sum = 0;
-        for (let i = 0; i < shape.size.height; ++i) {
-            for (let j = 0; j < shape.size.width; ++j) {
-                const cur_pos = {
-                    i: pos.i + i,
-                    j: pos.j + j,
-                };
-                if (isPosInBoard(cur_pos, board.size)) {
-                    const board_field = board.fields[cur_pos.i * board.size.width + cur_pos.j];
-                    if (board_field !== null) {
-                        covered_board_numbers_sum += board_field;
-                        board_coverage[cur_pos.i * board.size.width + cur_pos.j] = true;
+        if (pos !== null) {
+            for (let i = 0; i < shape.size.height; ++i) {
+                for (let j = 0; j < shape.size.width; ++j) {
+                    const cur_pos = {
+                        i: pos.i + i,
+                        j: pos.j + j,
+                    };
+                    if (isPosInBoard(cur_pos, board.size)) {
+                        const board_field = board.fields[cur_pos.i * board.size.width + cur_pos.j];
+                        if (board_field !== null) {
+                            covered_board_numbers_sum += board_field;
+                            board_coverage[cur_pos.i * board.size.width + cur_pos.j] = true;
+                        }
                     }
-                }
 
+                }
             }
         }
         if (shape_size != covered_board_numbers_sum) {
             return {
-                is_valid_solution: false,
-                violation: "Shape size mismatches accumulated board numbers",
+                success: false,
+                violation_message: "Shape size mismatches accumulated board numbers",
             }
         }
     }
@@ -136,15 +139,15 @@ export function checkGameSolution(board: Board, shapes: Shape[], shape_positions
             const index = i * board.size.width + j;
             if (board.fields[index] !== null && board_coverage[index] == false) {
                 return {
-                    is_valid_solution: false,
-                    violation: "Board element is not covered",
+                    success: false,
+                    violation_message: "Board element is not covered",
                 }
             }
         }
     }
     return {
-        is_valid_solution: true,
-        violation: null,
+        success: true,
+        violation_message: null,
     }
 }
 

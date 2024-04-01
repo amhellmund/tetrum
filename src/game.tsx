@@ -9,7 +9,7 @@ import "./css/layout.css"
 
 import { GameState, Position } from "./types";
 import Solution from "./solution";
-import { checkGameSolution } from "./utils";
+import { checkGameSolution, GameSolutionCheck } from "./utils";
 import getGameData from "./data";
 
 
@@ -20,7 +20,7 @@ export default function GameLayout() {
   const [elapsedSeconds, setElapsedSeconds] = useState(0);
   const [gameState, setGameState] = useState(GameState.Init);
   const [shapePositions, setShapePositions] = useState<Map<number, Position | null>>(new Map());
-  const [solutionData, setSolutionData] = useState({ success: false, violation_message: null });
+  const [solutionData, setSolutionData] = useState<GameSolutionCheck>({ success: false, violation_message: null });
 
   const game = getGameData();
 
@@ -59,6 +59,14 @@ export default function GameLayout() {
                 disabled={gameState != GameState.Started}
                 onClick={() => {
                   const solution_check = checkGameSolution(game.board, game.shapes, shapePositions);
+                  if (solution_check.success) {
+                    setGameState(GameState.Finished);
+                  }
+                  else {
+                    setGameState(GameState.Stopped);
+                  }
+                  setSolutionData(solution_check);
+                  setShowSolution(true);
                 }}
               >
                 Check Solution

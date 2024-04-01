@@ -58,9 +58,9 @@ test("color", () => {
 
 test("check solution with board not being covered", () => {
     const result = checkGameSolution(MOCK_GAME.board, MOCK_GAME.shapes, new Map<number, Position>());
-    expect(result.is_valid_solution).toBe(false);
-    expect(result.violation).not.toBe(null);
-    expect(result.violation).toContain("not covered");
+    expect(result.success).toBe(false);
+    expect(result.violation_message).not.toBe(null);
+    expect(result.violation_message).toContain("not covered");
 });
 
 test("check solution with shape size mismatch", () => {
@@ -70,9 +70,9 @@ test("check solution with shape size mismatch", () => {
 
     const result = checkGameSolution(MOCK_GAME.board, MOCK_GAME.shapes, shape_positions);
 
-    expect(result.is_valid_solution).toBe(false);
-    expect(result.violation).not.toBe(null);
-    expect(result.violation).toContain("size mismatch");
+    expect(result.success).toBe(false);
+    expect(result.violation_message).not.toBe(null);
+    expect(result.violation_message).toContain("size mismatch");
 });
 
 test("check solution all shapes being correctly placed", () => {
@@ -87,6 +87,6 @@ test("check solution all shapes being correctly placed", () => {
 
     const result = checkGameSolution(MOCK_GAME.board, MOCK_GAME.shapes, shape_positions);
 
-    expect(result.is_valid_solution).toBe(true);
-    expect(result.violation).toBe(null);
+    expect(result.success).toBe(true);
+    expect(result.violation_message).toBe(null);
 });

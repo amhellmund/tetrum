@@ -176,7 +176,7 @@ function ShapeUI(props: ShapeUIProperties) {
   return (
     <Line
       draggable={props.gameState == GameState.Started}
-      visible={props.gameState == GameState.Started}
+      visible={props.gameState == GameState.Started || props.gameState == GameState.Finished}
       x={shapePos.x}
       y={shapePos.y}
       closed={true}

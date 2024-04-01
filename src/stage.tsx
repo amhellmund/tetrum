@@ -2,11 +2,10 @@ import { Stage, Layer } from 'react-konva';
 
 import './css/game_stage.css'
 
-import getGameData from './data';
 import { computeBoxSize, computeGameSize, computeStageSize, computeShapeAreaStartPos } from './utils';
 import { BoardUI, ShapeAreaUI, ShapesUI, ActiveAreaMarkerUI } from './elements';
 import { useState } from 'react';
-import { GameArea, GameState, Position } from './types';
+import { Game, GameArea, GameState, Position } from './types';
 
 export type TetrumProperties = {
   game: Game
