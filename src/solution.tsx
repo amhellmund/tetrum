@@ -34,7 +34,7 @@ export default function Solution(props: SolutionProperties) {
                             {
                                 props.violation_message === null ?
                                     "You solution is correct. Congratulations!" :
-                                    `Your solution is incorrect: ${props.violation_message}. Press 'Start Game' to continue.`
+                                    `Your solution is incorrect: ${props.violation_message}. Press 'Continue Game' to continue.`
                             }
                         </Box>
                     </Grid>
