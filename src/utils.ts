@@ -25,10 +25,10 @@ export function computeGameSize(game: Game): GameSize {
 
 function getShapeSize(game: Game): Size {
     const max_i_for_shapes = Math.max(
-        ...game.shapes.map((shape) => shape.pos.i + shape.size.width), 0
+        ...game.shapes.map((shape) => shape.pos.i + shape.size.height), 0
     );
     const max_j_for_shapes = Math.max(
-        ...game.shapes.map((shape) => shape.pos.j + shape.size.height), 0
+        ...game.shapes.map((shape) => shape.pos.j + shape.size.width), 0
     );
 
     return {

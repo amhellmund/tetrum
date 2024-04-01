@@ -18,8 +18,8 @@ import { MOCK_GAME } from "./mock_data";
 test("game dimensions", () => {
     const game_sizes = computeGameSize(MOCK_GAME);
 
-    expect(game_sizes.overall).toStrictEqual({ width: 16, height: 10 });
-    expect(game_sizes.shapes).toStrictEqual({ width: 8, height: 10 });
+    expect(game_sizes.overall).toStrictEqual({ width: 16, height: 9 });
+    expect(game_sizes.shapes).toStrictEqual({ width: 8, height: 9 });
     expect(game_sizes.board).toStrictEqual({ width: 6, height: 6 });
 });
 

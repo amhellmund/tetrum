@@ -8,15 +8,21 @@ import GameStage from "./stage";
 import "./css/layout.css"
 
 import { GameState, Position } from "./types";
+import Solution from "./solution";
+import { checkGameSolution } from "./utils";
+import getGameData from "./data";
 
 
 export default function GameLayout() {
   const [showHelp, setShowHelp] = useState(false);
+  const [showSolution, setShowSolution] = useState(false);
   const [numMoves, setNumMoves] = useState(0);
   const [elapsedSeconds, setElapsedSeconds] = useState(0);
   const [gameState, setGameState] = useState(GameState.Init);
   const [shapePositions, setShapePositions] = useState<Map<number, Position | null>>(new Map());
+  const [solutionData, setSolutionData] = useState({ success: false, violation_message: null });
 
+  const game = getGameData();
 
   useEffect(() => {
     gameState == GameState.Started && setTimeout(() => setElapsedSeconds(elapsedSeconds + 1), 1000);
@@ -52,7 +58,7 @@ export default function GameLayout() {
                 variant="contained"
                 disabled={gameState != GameState.Started}
                 onClick={() => {
-                  console.log(shapePositions);
+                  const solution_check = checkGameSolution(game.board, game.shapes, shapePositions);
                 }}
               >
                 Check Solution
@@ -74,6 +80,7 @@ export default function GameLayout() {
           alignItems="center"
         >
           <GameStage
+            game={game}
             width={1100}
             height={600}
             gameState={gameState}
@@ -89,6 +96,12 @@ export default function GameLayout() {
       <Help
         show={showHelp}
         handleClose={() => { setShowHelp(false); }}
+      />
+      <Solution
+        show={showSolution}
+        handleClose={() => { setShowSolution(false); }}
+        success={solutionData.success}
+        violation_message={solutionData.violation_message}
       />
     </>
   )

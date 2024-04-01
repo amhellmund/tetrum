@@ -9,6 +9,7 @@ import { useState } from 'react';
 import { GameArea, GameState, Position } from './types';
 
 export type TetrumProperties = {
+  game: Game
   width: number;
   height: number;
   gameState: GameState;
@@ -18,8 +19,7 @@ export type TetrumProperties = {
 
 
 export default function GameStage(props: TetrumProperties) {
-  const game = getGameData();
-  const game_size = computeGameSize(game);
+  const game_size = computeGameSize(props.game);
   const box_size = computeBoxSize(game_size.overall, { width: props.width, height: props.height });
 
   const stage_size = computeStageSize(game_size.overall, box_size);
@@ -39,7 +39,7 @@ export default function GameStage(props: TetrumProperties) {
             <BoardUI
               key="game-board-ui"
               boxSize={box_size}
-              data={game.board}
+              data={props.game.board}
             />
           </Layer>
           <Layer key="shapes-area">
@@ -64,7 +64,7 @@ export default function GameStage(props: TetrumProperties) {
               key="shapes-ui"
               boxSize={box_size}
               startPos={shape_area_start_pos}
-              data={game.shapes}
+              data={props.game.shapes}
               boardSize={game_size.board}
               stageSize={stage_size}
               gameState={props.gameState}
