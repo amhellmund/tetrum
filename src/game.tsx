@@ -36,6 +36,16 @@ function useWindowDimensions() {
   return windowDimensions;
 }
 
+function getGameId(): string {
+  const queryParameters = new URLSearchParams(window.location.search)
+  if (queryParameters.has("game_id")) {
+    return queryParameters.get("game_id")!;
+  }
+  else {
+    return "easy1";
+  }
+}
+
 
 export default function GameLayout() {
   const [showHelp, setShowHelp] = useState(false);
@@ -46,9 +56,18 @@ export default function GameLayout() {
   const [gameState, setGameState] = useState(GameState.Init);
   const [shapePositions, setShapePositions] = useState<Map<number, Position | null>>(new Map());
   const [solutionData, setSolutionData] = useState<GameSolutionCheck>({ success: false, violation_message: null });
-  const [game, setGame] = useState<Game>(getGameData("test"));
 
-  const available_games = getAvailableGames();
+  const [game_id] = useState(getGameId());
+  const [game, setGame] = useState<Game>({ id: "empty", board: { size: { width: 0, height: 0 }, fields: [] }, shapes: [] });
+
+  useEffect(() => {
+    fetch(`/games/${game_id}.json`)
+      .then(response => response.json())
+      .then(data => {
+        console.log(`Message: ${data}`)
+        setGame(data)
+      })
+  }, [game_id]);
 
   useEffect(() => {
     gameState == GameState.Started && setTimeout(() => setElapsedSeconds(elapsedSeconds + 1), 1000);
@@ -59,6 +78,8 @@ export default function GameLayout() {
   const handleNewGame = (game_id: string) => {
     window.location.href = `/?game_id=${game_id}`;
   };
+
+  const available_games = getAvailableGames();
 
   return (
     <>
