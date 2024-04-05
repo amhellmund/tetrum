@@ -108,32 +108,35 @@ export function checkGameSolution(board: Board, shapes: Shape[], shape_positions
     const board_coverage = new Array(board.size.width * board.size.height).fill(false);
 
     for (const [index, pos] of shape_positions.entries()) {
-
         const shape = shapes[index];
         const shape_size = shape.fields.reduce((acc, value) => acc + (value == true ? 1 : 0), 0);
-        let covered_board_numbers_sum = 0;
         if (pos !== null) {
+            console.log(`Shape: ${shape.pos.i} - ${shape.pos.j} --- ${pos.i} - ${pos.j}`)
+            let covered_board_numbers_sum = 0;
             for (let i = 0; i < shape.size.height; ++i) {
                 for (let j = 0; j < shape.size.width; ++j) {
-                    const cur_pos = {
-                        i: pos.i + i,
-                        j: pos.j + j,
-                    };
-                    if (isPosInBoard(cur_pos, board.size)) {
-                        const board_field = board.fields[cur_pos.i * board.size.width + cur_pos.j];
-                        if (board_field !== null) {
-                            covered_board_numbers_sum += board_field;
-                            board_coverage[cur_pos.i * board.size.width + cur_pos.j] = true;
+                    if (shape.fields[i * shape.size.width + j] == true) {
+                        const cur_pos = {
+                            i: pos.i + i,
+                            j: pos.j + j,
+                        };
+                        if (isPosInBoard(cur_pos, board.size)) {
+                            const board_field = board.fields[cur_pos.i * board.size.width + cur_pos.j];
+                            if (board_field !== null) {
+                                console.log(`Acc: ${cur_pos.i} - ${cur_pos.j} - ${board_field}`)
+                                covered_board_numbers_sum += board_field;
+                                board_coverage[cur_pos.i * board.size.width + cur_pos.j] = true;
+                            }
                         }
                     }
-
                 }
             }
-        }
-        if (shape_size != covered_board_numbers_sum) {
-            return {
-                success: false,
-                violation_message: "Shape size mismatches accumulated board numbers",
+            if (shape_size != covered_board_numbers_sum) {
+                console.log(`Mismatch: ${shape_size} - ${covered_board_numbers_sum}`)
+                return {
+                    success: false,
+                    violation_message: "Shape size mismatches accumulated board numbers",
+                }
             }
         }
     }
