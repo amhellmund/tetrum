@@ -1,0 +1,204 @@
+{
+    "id": "6865e2d4-a2d7-4aa2-8cc9-adb588851206",
+    "board": {
+        "size": {
+            "width": 6,
+            "height": 6
+        },
+        "fields": [
+            2, 1, null, 0, 1, 1,
+            0, 1, null, 3, 1, null,
+            1, 2, 0, 0, 0, null,
+            1, 0, 3, 0, 2, 1,
+            null, 3, 0, 3, 1, 1,
+            2, 1, -1, 0, 1, null
+        ]
+    },
+    "shapes": [
+        {
+            "size": {
+                "width": 2,
+                "height": 2
+            },
+            "pos": {
+                "i": 0,
+                "j": 0
+            },
+            "fields": [
+                true, true,
+                true, false
+            ],
+            "coordinates": [
+                0, 0, 0, 2, 1, 2, 1, 1, 2, 1, 2, 0
+            ],
+            "color": {
+                "red": 255,
+                "green": 0,
+                "blue": 0,
+                "alpha": 0.5
+            }
+        },
+        {
+            "size": {
+                "width": 2,
+                "height": 3
+            },
+            "pos": {
+                "i": 3,
+                "j": 0
+            },
+            "fields": [
+                false, true,
+                false, true,
+                true, true
+            ],
+            "coordinates": [
+                0, 2, 0, 3, 2, 3, 2, 0, 1, 0, 1, 2
+            ],
+            "color": {
+                "red": 255,
+                "green": 255,
+                "blue": 0,
+                "alpha": 0.5
+            }
+        },
+        {
+            "size": {
+                "width": 2,
+                "height": 2
+            },
+            "pos": {
+                "i": 0,
+                "j": 3
+            },
+            "fields": [
+                true, true,
+                true, false
+            ],
+            "coordinates": [
+                0, 0, 0, 2, 1, 2, 1, 1, 2, 1, 2, 0
+            ],
+            "color": {
+                "red": 255,
+                "green": 255,
+                "blue": 128,
+                "alpha": 0.5
+            }
+        },
+        {
+            "size": {
+                "width": 1,
+                "height": 1
+            },
+            "pos": {
+                "i": 7,
+                "j": 0
+            },
+            "fields": [
+                true
+            ],
+            "coordinates": [
+                0, 0, 0, 1, 1, 1, 1, 0
+            ],
+            "color": {
+                "red": 128,
+                "green": 255,
+                "blue": 0,
+                "alpha": 0.5
+            }
+        },
+        {
+            "size": {
+                "width": 1,
+                "height": 1
+            },
+            "pos": {
+                "i": 3,
+                "j": 3
+            },
+            "fields": [
+                true
+            ],
+            "coordinates": [
+                0, 0, 0, 1, 1, 1, 1, 0
+            ],
+            "color": {
+                "red": 128,
+                "green": 255,
+                "blue": 255,
+                "alpha": 0.5
+            }
+        },
+        {
+            "size": {
+                "width": 1,
+                "height": 3
+            },
+            "pos": {
+                "i": 5,
+                "j": 3
+            },
+            "fields": [
+                true,
+                true,
+                true
+            ],
+            "coordinates": [
+                0, 0, 0, 3, 1, 3, 1, 0
+            ],
+            "color": {
+                "red": 255,
+                "green": 128,
+                "blue": 0,
+                "alpha": 0.5
+            }
+        },
+        {
+            "size": {
+                "width": 2,
+                "height": 3
+            },
+            "pos": {
+                "i": 0,
+                "j": 6
+            },
+            "fields": [
+                true, false,
+                true, true,
+                true, true
+            ],
+            "coordinates": [
+                0, 0, 0, 3, 2, 3, 2, 1, 1, 1, 1, 0
+            ],
+            "color": {
+                "red": 255,
+                "green": 128,
+                "blue": 255,
+                "alpha": 0.5
+            }
+        },
+        {
+            "size": {
+                "width": 3,
+                "height": 2
+            },
+            "pos": {
+                "i": 4,
+                "j": 6
+            },
+            "fields": [
+                false, true, false,
+                true, true, true
+            ],
+            "coordinates": [
+                1, 0, 1, 1, 0, 1, 0, 2, 3, 2, 3, 1, 2, 1, 2, 0
+            ],
+            "color": {
+                "red": 128,
+                "green": 128,
+                "blue": 128,
+                "alpha": 0.5
+            }
+        }         
+    ]
+}

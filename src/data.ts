@@ -13,6 +13,7 @@ function createDescription(id: string, name: string): GameDescription {
 
 export function getAvailableGames(): Map<string, GameDescription[]> {
     return new Map<string, GameDescription[]>([
-        ["Easy", [createDescription("test", "Test Game")]],
+        ["Easy", [createDescription("easy1", "Easy1 (6x6)")]],
+        ["Advanced", [createDescription("advanced1", "Advanced1 (6x6)")]],
     ]);
 }

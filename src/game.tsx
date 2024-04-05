@@ -63,10 +63,7 @@ export default function GameLayout() {
   useEffect(() => {
     fetch(`/games/${game_id}.json`)
       .then(response => response.json())
-      .then(data => {
-        console.log(`Message: ${data}`)
-        setGame(data)
-      })
+      .then(data => setGame(data))
   }, [game_id]);
 
   useEffect(() => {
@@ -156,7 +153,7 @@ export default function GameLayout() {
           <GameStage
             game={game}
             width={Math.floor(width * 0.75)}
-            height={Math.floor(height * 0.75)}
+            height={Math.floor(height * 0.70)}
             gameState={gameState}
             handleShapeMove={() => setNumMoves(numMoves + 1)}
             handleShapePositionUpdate={(shape_index: number, pos: Position | null) => {

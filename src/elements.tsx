@@ -62,7 +62,7 @@ function BoardRect(props: BoardRectProperties) {
       />
       <Text
         key={`board-text-${props.pos.i}-${props.pos.j}`}
-        text={props.value > 0 ? props.value.toString() : ""}
+        text={props.value == 0 ? "" : (props.value > 0 ? props.value.toString() : `- ${Math.abs(props.value).toString()}`)}
         width={props.boxSize}
         height={props.boxSize}
         x={coordinate.x}
