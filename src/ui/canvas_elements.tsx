@@ -1,15 +1,17 @@
 import { useState } from 'react';
 import { Line, Rect, Text } from 'react-konva';
-import { Board, GameArea, GameState, Position, Shape, Size } from './types';
-import { computeCoordinate, composeColorString, computePosition, isShapeInStage, isShapeInBoard } from './utils';
+import { Board, Shape } from '../games/types';
+import { Position, transformToCoordinate, transformToPosition } from '../utils/location_utils';
+import { composeColorString, isShapeInBoard, isShapeInStage, Size } from '../utils/ui_utils';
+import { GameState } from '../mechanics/types';
+import { GameArea } from './game_stage';
 
-
-export type BoardUIProperties = {
+export type CanvasElementBoardProperties = {
   boxSize: number;
   data: Board;
 }
 
-export function BoardUI(props: BoardUIProperties) {
+export function CanvasElementBoard(props: CanvasElementBoardProperties) {
   const board_elements = [];
 
   for (let i = 0; i < props.data.size.height; ++i) {
@@ -46,7 +48,7 @@ export type BoardRectProperties = {
 }
 
 function BoardRect(props: BoardRectProperties) {
-  const coordinate = computeCoordinate(props.pos, props.boxSize);
+  const coordinate = transformToCoordinate(props.pos, props.boxSize);
 
   return (
     <>
@@ -74,18 +76,18 @@ function BoardRect(props: BoardRectProperties) {
   )
 }
 
-export type ShapeAreaUIProperties = {
+export type CanvasElementShapeAreaProperties = {
   boxSize: number;
   startPos: Position;
   size: Size;
 }
 
-export function ShapeAreaUI(props: ShapeAreaUIProperties) {
+export function CanvasElementShapeArea(props: CanvasElementShapeAreaProperties) {
   const shape_area_elements = [];
 
   for (let i = 0; i < props.size.height; ++i) {
     for (let j = 0; j < props.size.width; ++j) {
-      const coordinate = computeCoordinate({ i: props.startPos.i + i, j: props.startPos.j + j }, props.boxSize);
+      const coordinate = transformToCoordinate({ i: props.startPos.i + i, j: props.startPos.j + j }, props.boxSize);
       shape_area_elements.push(
         <Rect
           key={`shape-area-${i}-${j}`}
@@ -110,7 +112,7 @@ export function ShapeAreaUI(props: ShapeAreaUIProperties) {
   )
 }
 
-export type ShapesUIProperties = {
+export type CanvasElementShapesProperties = {
   boxSize: number;
   startPos: Position;
   data: Shape[];
@@ -122,12 +124,12 @@ export type ShapesUIProperties = {
   handleShapePositionUpdate: (shape_index: number, new_pos: Position | null) => void;
 }
 
-export function ShapesUI(props: ShapesUIProperties) {
+export function CanvasElementShapes(props: CanvasElementShapesProperties) {
   const shapes = []
   for (const index in props.data) {
     const shape = props.data[index];
     shapes.push(
-      <ShapeUI
+      <CanvasElementShape
         key={`shape-${index}`}
         shapeIndex={parseInt(index)}
         boxSize={props.boxSize}
@@ -152,7 +154,7 @@ export function ShapesUI(props: ShapesUIProperties) {
   )
 }
 
-type ShapeUIProperties = {
+type CanvasElementShapeProperties = {
   shapeIndex: number;
   boxSize: number;
   startPos: Position;
@@ -165,8 +167,8 @@ type ShapeUIProperties = {
   handleShapePositionUpdate: (shape_index: number, new_pos: Position | null) => void;
 };
 
-function ShapeUI(props: ShapeUIProperties) {
-  const initial_coordinate = computeCoordinate({ i: props.startPos.i + props.data.pos.i, j: props.startPos.j + props.data.pos.j }, props.boxSize);
+function CanvasElementShape(props: CanvasElementShapeProperties) {
+  const initial_coordinate = transformToCoordinate({ i: props.startPos.i + props.data.pos.i, j: props.startPos.j + props.data.pos.j }, props.boxSize);
   const line_points = props.data.coordinates.map((coordinate) => coordinate * props.boxSize);
 
   const [shapePos, setShapePos] = useState(initial_coordinate);
@@ -186,7 +188,7 @@ function ShapeUI(props: ShapeUIProperties) {
       strokeWidth={2}
       opacity={1}
       onDragStart={(e) => {
-        const pos = computePosition({ x: e.target.x(), y: e.target.y() }, props.boxSize);
+        const pos = transformToPosition({ x: e.target.x(), y: e.target.y() }, props.boxSize);
         if (isShapeInBoard(props.data, pos, props.boardSize)) {
           setLastArea(GameArea.Board);
           setLastBoardPos(pos);
@@ -202,7 +204,7 @@ function ShapeUI(props: ShapeUIProperties) {
           y: e.target.y(),
         }
         if (isShapeInStage(props.data, current_coordinate, props.boxSize, props.stageSize)) {
-          const pos = computePosition({ x: e.target.x(), y: e.target.y() }, props.boxSize);
+          const pos = transformToPosition({ x: e.target.x(), y: e.target.y() }, props.boxSize);
           if (isShapeInBoard(props.data, pos, props.boardSize)) {
             props.handleActiveArea(GameArea.Board);
           }
@@ -233,9 +235,9 @@ function ShapeUI(props: ShapeUIProperties) {
           y: e.target.y(),
         }
         if (isShapeInStage(props.data, current_coordinate, props.boxSize, props.stageSize)) {
-          const pos = computePosition({ x: e.target.x(), y: e.target.y() }, props.boxSize);
+          const pos = transformToPosition({ x: e.target.x(), y: e.target.y() }, props.boxSize);
           if (isShapeInBoard(props.data, pos, props.boardSize)) {
-            const snapped_coordinate = computeCoordinate(pos, props.boxSize);
+            const snapped_coordinate = transformToCoordinate(pos, props.boxSize);
             setShapePos(snapped_coordinate);
             handleShapeMove(GameArea.Board, pos);
             props.handleShapePositionUpdate(props.shapeIndex, pos);
@@ -255,7 +257,7 @@ function ShapeUI(props: ShapeUIProperties) {
   )
 }
 
-export type ActiveAreaMarkerUIProperties = {
+export type CanvasElementActiveAreaProperties = {
   boxSize: number,
   boardSize: Size,
   shapesAreaStartPos: Position,
@@ -263,9 +265,9 @@ export type ActiveAreaMarkerUIProperties = {
   activeArea: string | null;
 }
 
-export function ActiveAreaMarkerUI(props: ActiveAreaMarkerUIProperties) {
-  const coordinate_board = computeCoordinate({ i: 0, j: 0 }, props.boxSize);
-  const coordinate_shapes = computeCoordinate(props.shapesAreaStartPos, props.boxSize);
+export function CanvasElementActiveArea(props: CanvasElementActiveAreaProperties) {
+  const coordinate_board = transformToCoordinate({ i: 0, j: 0 }, props.boxSize);
+  const coordinate_shapes = transformToCoordinate(props.shapesAreaStartPos, props.boxSize);
   return (
     <>
       <Rect

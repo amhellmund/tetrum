@@ -3,15 +3,19 @@ import { useState, useEffect } from "react";
 import { AppBar, Button, Box, Toolbar, Typography, IconButton, Drawer, Divider, ListItemButton, List, ListItemText, ListItem } from "@mui/material";
 import MenuIcon from '@mui/icons-material/Menu';
 
-import Help from "./help";
-import GameStage from "./stage";
+import Help from "../dialogs/help";
+import GameStage from "./game_stage";
 
-import "./css/layout.css"
+import "./game_layout.css"
 
-import { GameState, Position, Game } from "./types";
-import Solution from "./solution";
-import { checkGameSolution, GameSolutionCheck } from "./utils";
-import { getGameData, getAvailableGames, GameDescription } from "./data";
+import Solution from "../dialogs/solution";
+import { checkGameSolution, GameSolutionCheck } from "../mechanics/solution_check";
+import { getAvailableGames, GameDescription } from "../games/data";
+import { GameState } from "../mechanics/types";
+import { Position } from "../utils/location_utils";
+import { Game } from "../games/types";
+
+
 
 function getWindowDimensions() {
   const { innerWidth: width, innerHeight: height } = window;

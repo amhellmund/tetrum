@@ -1,13 +1,20 @@
 import { Stage, Layer } from 'react-konva';
 
-import './css/game_stage.css'
+import './game_stage.css'
 
-import { computeBoxSize, computeGameSize, computeStageSize, computeShapeAreaStartPos } from './utils';
-import { BoardUI, ShapeAreaUI, ShapesUI, ActiveAreaMarkerUI } from './elements';
+import { computeBoxSize, computeGameSize, computeStageSize, computeShapeAreaStartPos } from '../utils/ui_utils';
+import { CanvasElementBoard, CanvasElementShapes, CanvasElementShapeArea, CanvasElementActiveArea } from './canvas_elements';
 import { useState } from 'react';
-import { Game, GameArea, GameState, Position } from './types';
+import { Game } from '../games/types';
+import { GameState } from '../mechanics/types';
+import { Position } from '../utils/location_utils';
 
-export type TetrumProperties = {
+export enum GameArea {
+  Board = "board",
+  Shapes = "shapes",
+}
+
+export type GameStageProperties = {
   game: Game
   width: number;
   height: number;
@@ -16,8 +23,7 @@ export type TetrumProperties = {
   handleShapePositionUpdate: (shape_index: number, new_pos: Position | null) => void;
 };
 
-
-export default function GameStage(props: TetrumProperties) {
+export default function GameStage(props: GameStageProperties) {
   const game_size = computeGameSize(props.game);
   const box_size = computeBoxSize(game_size.overall, { width: props.width, height: props.height });
 
@@ -35,14 +41,14 @@ export default function GameStage(props: TetrumProperties) {
           height={stage_size.height}
         >
           <Layer key="game-board">
-            <BoardUI
+            <CanvasElementBoard
               key="game-board-ui"
               boxSize={box_size}
               data={props.game.board}
             />
           </Layer>
           <Layer key="shapes-area">
-            <ShapeAreaUI
+            <CanvasElementShapeArea
               key="shapes-area-ui"
               boxSize={box_size}
               startPos={shape_area_start_pos}
@@ -50,7 +56,7 @@ export default function GameStage(props: TetrumProperties) {
             />
           </Layer>
           <Layer key="active-region-marker">
-            <ActiveAreaMarkerUI
+            <CanvasElementActiveArea
               boxSize={box_size}
               boardSize={game_size.board}
               shapesAreaStartPos={shape_area_start_pos}
@@ -59,7 +65,7 @@ export default function GameStage(props: TetrumProperties) {
             />
           </Layer>
           <Layer key="shapes">
-            <ShapesUI
+            <CanvasElementShapes
               key="shapes-ui"
               boxSize={box_size}
               startPos={shape_area_start_pos}

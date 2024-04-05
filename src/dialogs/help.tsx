@@ -1,8 +1,8 @@
 import { Dialog, Button, DialogTitle, DialogContent, DialogActions, Box } from '@mui/material';
 
-import "./css/help.css"
+import "./help.css"
 
-import animated_help from "./assets/help.gif";
+import animated_help from "./help.gif";
 
 export type HelpProperties = {
     show: boolean;
