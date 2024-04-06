@@ -25,6 +25,7 @@ export function getAvailableGames(): Map<string, GameDescription[]> {
             "Advanced",
             [
                 createDescription("advanced1", "Advanced1 (6x6)"),
+                createDescription("advanced2", "Advanced2 (7x7)"),
             ]
         ],
     ]);
