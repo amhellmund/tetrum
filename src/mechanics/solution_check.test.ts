@@ -2,11 +2,6 @@ import { MOCK_GAME } from "../games/mock_game";
 import { Position } from "../utils/location_utils";
 import { checkGameSolution } from "./solution_check";
 
-
-
-
-
-
 test("check solution with board not being covered", () => {
     const result = checkGameSolution(MOCK_GAME.board, MOCK_GAME.shapes, new Map<number, Position>());
     expect(result.success).toBe(false);
