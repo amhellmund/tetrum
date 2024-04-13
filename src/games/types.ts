@@ -26,3 +26,12 @@ export type Shape = {
     coordinates: number[];
     color: Color;
 }
+
+export function constructColor(rgba: [number, number, number, number]): Color {
+    return {
+        red: rgba[0],
+        green: rgba[1],
+        blue: rgba[2],
+        alpha: rgba[3],
+    }
+}

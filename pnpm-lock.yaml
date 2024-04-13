@@ -17,9 +17,15 @@ dependencies:
   '@mui/material':
     specifier: ^5.15.14
     version: 5.15.14(@emotion/react@11.11.4)(@emotion/styled@11.11.5)(@types/react@18.2.37)(react-dom@18.2.0)(react@18.2.0)
+  '@types/colormap':
+    specifier: ^2.3.4
+    version: 2.3.4
   ajv:
     specifier: ^8.12.0
     version: 8.12.0
+  colormap:
+    specifier: ^2.3.2
+    version: 2.3.2
   konva:
     specifier: ^9.2.3
     version: 9.2.3
@@ -1596,6 +1602,10 @@ packages:
       '@babel/types': 7.24.0
     dev: true
 
+  /@types/colormap@2.3.4:
+    resolution: {integrity: sha512-kKKbv5JXmWieUCqjO1amnf/2wS8pHKdjxnxKanWalI6p3ly5Hjt+/+6oB+Sk+dC02qzNuj6x87xltb+PPxeiNQ==}
+    dev: false
+
   /@types/estree@1.0.5:
     resolution: {integrity: sha512-/kYRxGDLWzHOB7q+wtSUQlFrtcdUccpfy+X+9iMBpHK8QLLhx2wIPYuS5DYtR9Wa/YlZAbIovy7qVdB1Aq6Lyw==}
     dev: true
@@ -2156,6 +2166,12 @@ packages:
   /color-name@1.1.4:
     resolution: {integrity: sha512-dOy+3AuW3a2wNbZHIuMZpTcgjGuLU/uBL/ubcZF9OXbDo8ff4O8yVp5Bf0efS8uEoYo5q4Fx7dY9OgQGXgAsQA==}
     dev: true
+
+  /colormap@2.3.2:
+    resolution: {integrity: sha512-jDOjaoEEmA9AgA11B/jCSAvYE95r3wRoAyTf3LEHGiUVlNHJaL1mRkf5AyLSpQBVGfTEPwGEqCIzL+kgr2WgNA==}
+    dependencies:
+      lerp: 1.0.3
+    dev: false
 
   /concat-map@0.0.1:
     resolution: {integrity: sha512-/Srv4dswyQNBfohGpz9o6Yb3Gz3SrUDqBH5rTuhGR7ahtlbYKnVxw2bCFMRljaA7EXHaXZ8wsHdodFvbkhKmqg==}
@@ -3328,6 +3344,10 @@ packages:
 
   /konva@9.2.3:
     resolution: {integrity: sha512-oQ6VQ6kUL9IlhOGuEKKhxqnv6g/t8jZpVuWahQQ6hCqAsO8Ydi1zFGv7ef4EOq5GoPNq/d6Fyj/3i5Y/a5NooA==}
+    dev: false
+
+  /lerp@1.0.3:
+    resolution: {integrity: sha512-70Rh4rCkJDvwWiTsyZ1HmJGvnyfFah4m6iTux29XmasRiZPDBpT9Cfa4ai73+uLZxnlKruUS62jj2lb11wURiA==}
     dev: false
 
   /leven@3.1.0:

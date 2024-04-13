@@ -1,5 +1,7 @@
 import { Size } from "../utils/ui_utils";
 import Ajv, { JSONSchemaType } from "ajv";
+import { Game, Shape, constructColor } from "./types";
+import createColormap from "colormap";
 
 
 export type BoardInput = {
@@ -77,4 +79,37 @@ export function parseInput(data: Record<string, unknown>): GameInput | null {
         }
         return null;
     }
+}
+
+export function convertToGame(input: GameInput): Game {
+    return {
+        id: input.id,
+        board: input.board,
+        shapes: convertToShapes(input.shapes),
+    }
+}
+
+function convertToShapes(input: ShapeInput[]): Shape[] {
+    const SHAPE_ALPHA = 0.5;
+    const colormap = createColormap(
+        {
+            colormap: "jet",
+            format: "rgba",
+            // the "jet" color map requires at least 6 shades
+            nshades: Math.max(input.length, 6),
+        }
+    )
+
+    return input.map((shape, index) => {
+        return {
+            size: shape.size,
+            fields: shape.fields,
+            coordinates: [0, 0, 1, 1],
+            color: constructColor([colormap[index][0], colormap[index][1], colormap[index][2], SHAPE_ALPHA]),
+            pos: {
+                i: 0,
+                j: 0,
+            }
+        }
+    });
 }
