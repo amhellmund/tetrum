@@ -12,7 +12,8 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import { convertToGame, parseInput, GameInput } from "./input";
+import { createSize, Size } from "../utils/ui_utils";
+import { convertToGame, convertToCoordinates, parseInput, GameInput } from "./input";
 
 test("parseInput with correct game input", () => {
     const TEST_DATA = {
@@ -108,4 +109,116 @@ test("convert game input to game", () => {
 
     const color_set = new Set(game.shapes.map((shape) => shape.color));
     expect(color_set.size).toBe(game.shapes.length);
+})
+
+type FieldsToCoordinatesTestData = {
+    size: Size;
+    fields: boolean[];
+    coordinates: number[];
+}
+
+function createTestData(width: number, height: number, fields: boolean[], coordinates: number[]): FieldsToCoordinatesTestData {
+    return {
+        size: createSize(width, height),
+        fields: fields,
+        coordinates: coordinates,
+    }
+}
+
+const TEST_DATA = [
+    // Shape:
+    //   ##
+    //   #
+    createTestData(2, 2, [
+        true, true,
+        true, false
+    ], [
+        0, 0, 0, 2, 1, 2, 1, 1, 2, 1, 2, 0
+    ]),
+    // Shape:
+    //    #
+    //    #
+    //   ##
+    createTestData(2, 3, [
+        false, true,
+        false, true,
+        true, true
+    ], [
+        0, 2, 0, 3, 2, 3, 2, 0, 1, 0, 1, 2
+    ]),
+    // Shape:
+    //   #
+    createTestData(1, 1, [true], [
+        0, 0, 0, 1, 1, 1, 1, 0
+    ]),
+    // Shape:
+    //    #
+    //   ###
+    createTestData(3, 2, [
+        false, true, false,
+        true, true, true
+    ], [
+        1, 0, 1, 1, 0, 1, 0, 2, 3, 2, 3, 1, 2, 1, 2, 0
+    ]),
+    // Shape:
+    //   #
+    //   #
+    //   #
+    createTestData(1, 3, [
+        true,
+        true,
+        true
+    ], [
+        0, 0, 0, 3, 1, 3, 1, 0
+    ]),
+    // Shape:
+    //   ####
+    //      #
+    //      #
+    createTestData(4, 3, [
+        true, true, true, true,
+        false, false, false, true,
+        false, false, false, true
+    ], [
+        0, 0, 0, 1, 3, 1, 3, 3, 4, 3, 4, 0
+    ]),
+    // Shape:
+    //   ###
+    //   #
+    //   #
+    createTestData(3, 3, [
+        true, true, true,
+        true, false, false,
+        true, false, false
+    ], [
+        0, 0, 0, 3, 1, 3, 1, 1, 3, 1, 3, 0
+    ]),
+    // Shape:
+    //   ##
+    //   #
+    //   ##
+    createTestData(2, 3, [
+        true, true,
+        true, false,
+        true, true
+    ], [
+        0, 0, 0, 3, 2, 3, 2, 2, 1, 2, 1, 1, 2, 1, 2, 0
+    ]),
+    // Shape:
+    //   ##
+    //    #
+    //    ##
+    createTestData(3, 3, [
+        true, true, false,
+        false, true, false,
+        false, true, true
+    ], [
+        0, 0, 0, 1, 1, 1, 1, 3, 3, 3, 3, 2, 2, 2, 2, 0
+    ])
+]
+
+describe("fields to coordinates conversion", () => {
+    it.each(TEST_DATA)("conversion with test data %p", (data: FieldsToCoordinatesTestData) => {
+        expect(convertToCoordinates(data.size, data.fields)).toStrictEqual(data.coordinates)
+    })
 })

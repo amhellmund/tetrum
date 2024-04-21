@@ -127,3 +127,7 @@ function convertToShapes(input: ShapeInput[]): Shape[] {
         }
     });
 }
+
+export function convertToCoordinates(size: Size, fields: boolean[]): number[] {
+    return [fields.length, size.height, size.width];
+}
