@@ -63,7 +63,7 @@ const shape_schema: JSONSchemaType<ShapeInput> = {
             type: "array",
             items: { type: "boolean" }
         }
-    },
+    }, coordinates
     required: ["size", "fields"],
 }
 
@@ -128,6 +128,18 @@ function convertToShapes(input: ShapeInput[]): Shape[] {
     });
 }
 
+/**
+ * Converts a shape specification into a list of drawable coordinates.
+ * 
+ * This function assumes that the shape is solid without holes inside.
+ * 
+ * @param size The size of the shape as rectangle.
+ * @param fields The indication which cells the shape are used for game.
+ * @returns The list of drawable coordinates [[x1, y1], ... [xN, yN]]. 
+ * The x-coordinate points in horizontal direction, while the y-coordinate
+ * points into the vertical direction.
+ */
 export function convertToCoordinates(size: Size, fields: boolean[]): number[] {
-    return [fields.length, size.height, size.width];
+    const coordinates = [fields.length, size.height, size.width];
+    return coordinates;
 }
