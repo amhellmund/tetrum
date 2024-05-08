@@ -16,6 +16,8 @@ import { Size } from "../utils/ui_utils";
 import Ajv, { JSONSchemaType } from "ajv";
 import { Game, Shape, constructColor } from "./types";
 import createColormap from "colormap";
+import { Position } from "../utils/location_utils";
+import { NavigateBeforeRounded } from "@mui/icons-material";
 
 
 export type BoardInput = {
@@ -63,7 +65,7 @@ const shape_schema: JSONSchemaType<ShapeInput> = {
             type: "array",
             items: { type: "boolean" }
         }
-    }, coordinates
+    },
     required: ["size", "fields"],
 }
 
@@ -139,7 +141,35 @@ function convertToShapes(input: ShapeInput[]): Shape[] {
  * The x-coordinate points in horizontal direction, while the y-coordinate
  * points into the vertical direction.
  */
-export function convertToCoordinates(size: Size, fields: boolean[]): number[] {
-    const coordinates = [fields.length, size.height, size.width];
+export function convertToCoordinates(size: Size, fields: boolean[]): number[][] {
+    // Each shape is represented by a rectangle of the given size. To find the coordinates
+    // of the hull, we iterate in the counter-clockwise direction over the outer cells. We
+    // start from the top-left corner and move in the vertical direction until we reach the
+    // either the end or a cell with a value of false.
+
+    const cells_of_hull_counter_clockwise: Position[] = [];
+
+    const first_cell_left_border = findFirstCellOnLeftBorder(size, fields);
+    cells_of_hull_counter_clockwise.push(first_cell_left_border);
+
+    // traverse the left border
+    const left_border_traversal = traverse(size, fields, first_cell_left_border, [1, 0], [0, 1]);
+
+    // traverse the bottom border
+
+    // traverse the right border
+
+    // traverse the top border
+
+    // flatten the coordinates
     return coordinates;
+}
+
+function findFirstCellOnLeftBorder(size: Size, fields: boolean[]): Position | never {
+    for (let i = 0; i < size.height; i++) {
+        if (fields[i * size.width]) {
+            return { i, j };
+        }
+    }
+    throw new Error("No cell found on the left border.");
 }
