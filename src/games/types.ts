@@ -33,11 +33,15 @@ export type Color = {
     alpha: number;
 }
 
-export type Shape = {
-    pos: Position;
+export type ShapeLayout = {
     size: Size;
     fields: boolean[];
     coordinates: number[];
+}
+
+export type Shape = {
+    pos: Position;
+    layout: ShapeLayout;
     color: Color;
 }
 
